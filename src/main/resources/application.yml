@@ -1,0 +1,38 @@
+# ?? ??
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+
+logging:
+  level:
+    org:
+      springframework:
+        boot:
+          autoconfigure:
+            security: INFO
+        security: DEBUG
+
+# ???? ??
+spring:
+  thymeleaf:
+    cache: false
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  datasource:
+    password: 1234
+    url: jdbc:mysql://127.0.0.1:3306/shopping_web?serverTimezone=UTC
+    username: root
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: true
