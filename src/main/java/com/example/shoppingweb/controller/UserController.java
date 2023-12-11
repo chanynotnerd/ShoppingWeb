@@ -17,6 +17,7 @@ public class UserController {
     @PostMapping("/user")
     public @ResponseBody String insertUser(@RequestBody User user)
     {
+        // 유저 추가
         user.setRole(RoleType.USER);
         userRepository.save(user);
         return user.getUsername() + " 회원가입 성공";
