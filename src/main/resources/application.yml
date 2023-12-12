@@ -18,7 +18,11 @@ logging:
 # ???? ??
 spring:
   thymeleaf:
-    cache: false
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false # 개발 중에는 캐시 비활성화를 권장합니다.
+    mode: DEBUG
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
