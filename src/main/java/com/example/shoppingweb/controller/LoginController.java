@@ -1,6 +1,6 @@
 package com.example.shoppingweb.controller;
 
-import com.example.shoppingweb.ResponseDTO;
+import com.example.shoppingweb.dto.ResponseDTO;
 import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.example.shoppingweb.exception;
 
-import com.example.shoppingweb.ResponseDTO;
+import com.example.shoppingweb.dto.ResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
