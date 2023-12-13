@@ -17,8 +17,10 @@ public class ItemController {
 
     @GetMapping("/item/category/{category}")
     public String getItemListByCategory(@PathVariable String category, Model model,
-                                        @PageableDefault(size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+                                        @PageableDefault(size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable)
+    {
         model.addAttribute("itemList", itemService.getItemListByCategory(category.toUpperCase(), pageable));
+        model.addAttribute("category", category);   // 카테고리별 페이징을 위함.
         return "index";
     }
 

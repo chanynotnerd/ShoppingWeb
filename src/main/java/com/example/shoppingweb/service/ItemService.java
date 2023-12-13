@@ -14,8 +14,6 @@ public class ItemService {
     @Autowired
     private ItemRepository itemRepository;
 
-
-
     @Transactional(readOnly = true)
     public Item getItem(int id)
     {

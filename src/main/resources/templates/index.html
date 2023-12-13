@@ -18,16 +18,16 @@
                     <!-- Product details-->
                     <div class="card-body p-4">
                         <div class="text-center">
-                            <!-- Product name-->
+                            <!-- Product name, price-->
                             <h5 class="fw-bolder" th:text="${item.itemName}"></h5>
                             <span th:text="${item.price + ' 원'}"></span>
                         </div>
                     </div>
-                    <!-- Product actions-->
+                    <!-- Product buttons-->
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                         <div class="row">
                             <div class="col">
-                                <a class="btn btn-outline-dark mt-auto w-120" href="#">상세보기</a>
+                                <a class="btn btn-outline-dark mt-auto w-120" th:href="@{/item/{id}(id=${item.id})}">상세보기</a>
                             </div>
                             <div class="col">
                                 <a class="btn btn-outline-dark mt-auto w-120" href="#">카트담기</a>
@@ -39,10 +39,10 @@
         </div>
         <ul class="pagination justify-content-end">
             <li class="page-item" th:classappend="${itemList.first} ? 'd-none' : ''">
-                <a class="page-link" th:href="'/?page=' + ${itemList.number-1}">이전 페이지</a>
+                <a class="page-link" th:href="${category} ? '/item/category/' + ${category} + '?page=' + ${itemList.number-1} : '/?page=' + ${itemList.number-1}">이전 페이지</a>
             </li>
             <li class="page-item" th:classappend="${itemList.last} ? 'd-none' : ''">
-                <a class="page-link" th:href="'/?page=' + ${itemList.number+1}">다음 페이지</a>
+                <a class="page-link" th:href="${category} ? '/item/category/' + ${category} + '?page=' + ${itemList.number+1} : '/?page=' + ${itemList.number+1}">다음 페이지</a>
             </li>
         </ul>
         <p th:text="${itemList.number}"></p>
