@@ -1,0 +1,12 @@
+package com.example.shoppingweb.persistance;
+
+import com.example.shoppingweb.domain.Cart;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface CartRepository extends JpaRepository<Cart, Integer> {
+    Optional<Cart> findByUserId(int userid);
+}
