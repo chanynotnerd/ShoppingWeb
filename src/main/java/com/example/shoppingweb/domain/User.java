@@ -31,6 +31,16 @@ public class User {
     @Column(nullable = false, length = 100)
     private String email;
 
+    @Column(nullable = false, length = 6)
+    private String postcode;
+
+    @Column(nullable = false, length = 100)
+    private String address;
+
+    @Lob
+    @Column(nullable = false)
+    private String detailAddress;
+
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
