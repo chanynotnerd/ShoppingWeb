@@ -11,6 +11,8 @@ let cartObject =
 
 	addToCart: function() {
 		alert("장바구니에 제품이 담겼습니다.");
+		        let form = $("form"); // form 요소 선택
+                let url = form.attr('action'); // form의 action 속성 사용
         		let cart = {	// user 객체 선언
                     userId: userId,
                     itemId: itemId,
@@ -19,12 +21,14 @@ let cartObject =
 
 				$.ajax({
 					type: "POST",
-					url: "/cart/user/" + userId + "/" + itemId,
+					url: url,
 					data: JSON.stringify(cart),
 					contentType: "application/json; charset=utf-8"
 				}).done(function(response) {
-					let status = response["status"];
-					if (status == 200) {
+				console.log(response);
+				console.log("Request URL:", url);
+					// let status = response["status"];
+					if (response.status == 200) {
 						let message = response["data"];
 						alert(message);
 						window.location.href = "/item/" + itemId;
