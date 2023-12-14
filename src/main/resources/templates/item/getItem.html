@@ -25,11 +25,21 @@
 </div>
 
 <div class = "d-flex justify-content-center">
-    <a class="btn btn-outline-dark mt-3 me-2" href="#" style="width: 15%">카트담기</a>
+    <form class="d-flex">
+        <div class="d-flex">
+            <input class="form-control text-center me-3" id="amount" name="amount" type="num" value="1"
+                   style="max-width: 3rem"/>
+            <button id="btn-save" class="btn btn-secondary">장바구니</button>
+        </div>
+    </form>
     <a class="btn btn-outline-dark mt-3" href="#" style="width: 15%">바로구매</a>
 </div>
 <br><br>
-
+<script th:inline="javascript">
+    var itemId = [[${item.id}]];
+    var userId = [[${user.id}]];
+</script>
+<script src="/js/cart.js"></script>
 <div th:replace="fragment/footer :: footer"></div>
 </body>
 </html>

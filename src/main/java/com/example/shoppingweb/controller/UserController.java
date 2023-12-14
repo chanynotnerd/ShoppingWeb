@@ -22,6 +22,7 @@ public class UserController {
         return "user/insertUser";
     }
 
+
     @PostMapping("/auth/insertUser")
     public @ResponseBody ResponseDTO<?> insertUser(@RequestBody User user)
     {
