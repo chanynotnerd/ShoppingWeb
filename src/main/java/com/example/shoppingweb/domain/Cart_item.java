@@ -26,5 +26,17 @@ public class Cart_item {
 
     private int count;  // 한 항목에 대한 총 수량(A항목 2개, B항목 3개면 총 5개)
 
+    public static Cart_item createCartItem(Cart cart, Item item, int amount) {
+        Cart_item cartItem = new Cart_item();
+        cartItem.setCart(cart);
+        cartItem.setItem(item);
+        cartItem.setCount(amount);
+        return cartItem;
+    }
+
+    // 이미 담겨있는 물건 또 담을 경우 수량 증가
+    public void addCount(int count) {
+        this.count += count;
+    }
 
 }

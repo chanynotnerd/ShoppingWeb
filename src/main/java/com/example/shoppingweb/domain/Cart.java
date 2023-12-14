@@ -24,4 +24,11 @@ public class Cart {
     private User user;
 
     private int count;  // 항목에 대한 수(A상품, B상품 총 2개)
+
+    public static Cart createCart(User user) {
+        Cart cart = new Cart();
+        cart.setCount(0);
+        cart.setUser(user);
+        return cart;
+    }
 }
