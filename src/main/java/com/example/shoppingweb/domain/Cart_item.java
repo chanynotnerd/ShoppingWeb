@@ -39,4 +39,18 @@ public class Cart_item {
         this.count += count;
     }
 
+    // userId를 반환하는 메소드
+    public Integer getUserId() {
+        return this.cart != null && this.cart.getUser() != null ? this.cart.getUser().getId() : null;
+    }
+
+    // itemId를 반환하는 메소드
+    public Integer getItemId() {
+        return this.item != null ? this.item.getId() : null;
+    }
+
+    public int getAmount() {
+        return this.count;
+    }
+
 }

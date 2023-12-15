@@ -24,8 +24,8 @@
     </div>
 </div>
 
-<div class = "d-flex justify-content-center">
-    <form class="d-flex" th:action="@{/cart/user/{userId}/{itemId}(userId=${user.id}, itemId=${item.id})}" method="post">
+<!--<div class = "d-flex justify-content-center">
+    <form class="d-flex" th:action="@{/cart/user/add}" method="post">
         <div class="d-flex">
             <input class="form-control text-center me-3" id="amount" name="amount" type="num" value="1"
                    style="max-width: 3rem"/>
@@ -33,12 +33,18 @@
         </div>
     </form>
     <a class="btn btn-outline-dark mt-3" href="#" style="width: 15%">바로구매</a>
+</div>-->
+<div>
+    <input class="form-control text-center me-3" id="amount" name="amount" type="num" value="1"
+           style="max-width: 3rem"/>
+    <button id="btn-save" class="btn btn-secondary">장바구니</button>
 </div>
 <br><br>
 <script th:inline="javascript">
-    var itemId = [[${item.id}]];
-    var userId = [[${user.id}]];
+    window.itemId = [[${item.id}]];
+    window.userId = [[${user.id}]];
 </script>
+<script src="/js/cart.js"></script>
 <script src="/js/cart.js"></script>
 <div th:replace="fragment/footer :: footer"></div>
 </body>
