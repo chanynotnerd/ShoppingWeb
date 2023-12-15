@@ -48,5 +48,4 @@ public class ItemController {
         model.addAttribute("user", user); // "user"라는 이름으로 User 객체를 모델에 추가
         return "item/getItem";
     }
-
 }

@@ -33,7 +33,7 @@ let cartObject =
 						let message = response["data"];
 						alert(message);
 						// window.location.href = "/item/" + itemId;
-						location = "/";
+						location = "/item/" + itemId;
 						console.log(response);
 					}
 					else {

@@ -7,6 +7,7 @@ import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.persistance.CartRepository;
 import com.example.shoppingweb.persistance.Cart_itemRepository;
 import com.example.shoppingweb.persistance.ItemRepository;
+import com.example.shoppingweb.persistance.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,36 +25,8 @@ public class CartService {
     @Autowired
     private Cart_itemRepository cartItemRepository;
 
-    // 장바구니에 Item 추가
-    /*@Transactional
-    public void addCart(User user, Item newItem, int amount) {
-
-        // 유저 id로 해당 유저의 장바구니 찾기
-        Cart cart = cartRepository.findByUserId(user.getId()).orElse(null);
-
-        // 장바구니가 존재하지 않는다면
-        if (cart == null) {
-            cart = Cart.createCart(user);
-            cartRepository.save(cart);
-        }
-
-        Item item = itemRepository.findById(newItem.getId()).orElse(null);
-        Cart_item cartItem = cartItemRepository.findByCart_IdAndItem_Id(cart.getId(), item.getId());
-
-        // 상품이 장바구니에 존재하지 않는다면 카트상품 생성 후 추가
-        if (cartItem == null) {
-            cartItem = Cart_item.createCartItem(cart, item, amount);
-            cartItemRepository.save(cartItem);
-        }
-        // 상품이 장바구니에 이미 존재한다면 수량만 증가
-        else {
-            cartItem.addCount(amount);
-            cartItemRepository.save(cartItem);
-        }
-        // 카트 상품 총 개수 증가
-        cart.setCount(cart.getCount() + amount);
-        cartRepository.save(cart);
-    }*/
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional
     public void insertCart(User user, Item newItem, int amount)
@@ -98,7 +71,13 @@ public class CartService {
 
         return user_items;
     }
+    public Cart getCartByUserId(int userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid userId: " + userId));
 
+        return cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("No cart found for user: " + userId));
+    }
     @Transactional(readOnly = true)
     public Cart getCartByUser(User user) {
         return cartRepository.findByUserId(user.getId()).orElse(null);

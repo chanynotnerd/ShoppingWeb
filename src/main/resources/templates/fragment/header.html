@@ -45,7 +45,7 @@
                     </li>
                 </ul>
             </div>
-            <form class="d-flex" style="margin-left: auto;">
+            <form class="d-flex" th:action="@{/cart/user/{userId}(userId=${userId})}" style="margin-left: auto;">
                 <button class="btn btn-outline-dark" type="submit">
                     <i class="bi-cart-fill me-1"></i>
                     Cart

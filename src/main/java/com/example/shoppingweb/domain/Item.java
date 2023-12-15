@@ -21,14 +21,14 @@ public class Item {
     @Column(nullable = false, length = 100)
     private String itemName;
 
-    @Column(nullable = false, length = 50)
-    private String price;
+    @Column(nullable = false)
+    private int price;
 
-    @Column(length = 50)
-    private String discountPercent;
+    @Column
+    private Integer discountPercent;
 
-    @Column(length = 50)
-    private String discountPrice;
+    @Column
+    private Integer discountPrice;
 
     @Enumerated(EnumType.STRING)
     private ItemCategory category;

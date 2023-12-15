@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -24,6 +26,10 @@ public class Cart {
     private User user;
 
     private int count;  // 항목에 대한 수(A상품, B상품 총 2개)
+
+    @Builder.Default
+    @OneToMany(mappedBy = "cart")
+    private List<Cart_item> cartItems = new ArrayList<>();
 
     public static Cart createCart(User user) {
         Cart cart = new Cart();

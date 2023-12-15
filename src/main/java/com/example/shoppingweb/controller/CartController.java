@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -29,6 +30,11 @@ public class CartController {
 
     @Autowired
     private ItemService itemService;
+
+    private Integer getLoggedInUserId(HttpSession session) {
+        User user = (User) session.getAttribute("principal");
+        return user != null ? user.getId() : null;
+    }
 
     @PostMapping("/cart/add")
     public @ResponseBody ResponseDTO<?> AddCart(@RequestBody CartItemDTO cartItemDTO)
@@ -52,61 +58,39 @@ public class CartController {
         return "item/getItem";
     }
 
-/*    @PostMapping("/item/addToCart")
-    public String addToCart(@RequestBody Cart_item cartItem) {
-        User user = userService.findUserById(cartItem.getUserId());
-        Item item = itemService.getItem(cartItem.getItemId());
+    @GetMapping("/user/{userId}")
+    public String getCartByUserId(@PathVariable int userId, Model model) {
+        Cart cart = cartService.getCartByUserId(userId);
+        model.addAttribute("cart", cart);
+        return "cart";
+    }
 
-        cartService.addCart(user, item, cartItem.getAmount());
-
-        return "redirect:/item/" + cartItem.getItemId();
-    }*/
-
-  /*  @PostMapping("/user/add")
-    public ResponseEntity<ResponseDTO<String>> addCartItem(@RequestBody Cart_item cartItem) {
-        User user = userService.findUserById(cartItem.getUserId());
-        Item item = itemService.getItem(cartItem.getItemId());
-
-        cartService.addCart(user, item, cartItem.getAmount());
-
-        return ResponseEntity.ok(new ResponseDTO<>(HttpStatus.OK.value(), "data add successfully"));
-    }*/
-
-/*    @GetMapping("/user/add")
-    public String addCartItem()
-    {
-        return "item/getItem";
-    }*/
-    /*// 장바구니에 Item 추가
-    @PostMapping("/user/{userId}/{itemId}")
-    public @ResponseBody ResponseDTO<String> addCartItem(@PathVariable("userId") Integer userId,
-                                                         @PathVariable("itemId") Integer itemId,
-                                                         @RequestParam("amount") int amount) {
-
-        // 로그 출력
-        System.out.println("Received request for addCartItem: userId=" + userId + ", itemId=" + itemId + ", amount=" + amount);
+    @GetMapping("/cart/user")
+    public String viewCart(HttpSession session, Model model) {
+        Integer userId = getLoggedInUserId(session);
+        if (userId == null) {
+            // 로그인하지 않은 사용자의 경우, 로그인 페이지로 리다이렉트
+            return "redirect:/auth/login";
+        }
 
         User user = userService.findUserById(userId);
-        Item item = itemService.getItem(itemId);
+        Cart cart = cartService.getCartByUser(user);
+        if (cart == null) {
+            // 사용자에게 할당된 Cart가 없는 경우, 새 Cart를 생성
+            cart = Cart.createCart(user);
+            cartService.insertCart(user, null, 0);
+        }
+        model.addAttribute("cart", cart);
+        return "cart/getCart";
+    }
 
-        cartService.addCart(user, item, amount);
-
-        // ResponseDTO를 사용하여 응답 반환
-        return new ResponseDTO<>(HttpStatus.OK.value(), "data add successfully");
-    }*/
-
-/*    @GetMapping("/user/add")
-    public String redirectToItemDetail(@PathVariable("userId") Integer userId,
-                                       @PathVariable("itemId") Integer itemId) {
-        return "/item/" + itemId;
-    }*/
-
-    // 장바구니 보기
-    @GetMapping("/user/cart/{userId}")
+/*    // 장바구니 보기
+    @GetMapping("/cart/user/{userId}")
     public String viewCart(@PathVariable("userId") Integer userId, Model model) {
         User user = userService.findUserById(userId);
         Cart cart = cartService.getCartByUser(user);
         model.addAttribute("cart", cart);
-        return "cart";
-    }
+        return "getCart";
+    }*/
+
 }
