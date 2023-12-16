@@ -7,23 +7,12 @@ let cartObject =
 		$("#btn-save").on("click", () => {
 			_this.addToCart();
 		});
-		$("#btn-delete").on("click", (e) => {
 
+
+		$("#btn-delete").on("click", (e) => {
 		        let itemId = $("#btn-delete").data('cart-item-id');
-                alert("aaa"+itemId)
         	    _this.deleteItem(itemId);
         });
-
-/*		 $('.update-quantity').on('change', function() {
-             let itemId = $(this).data('item-id');
-             let newQuantity = $(this).val();
-             _this.updateQuantity(itemId, newQuantity);
-         });
-
-         $('.delete-item').on('click', function() {
-             let itemId = $(this).data('item-id');
-             _this.deleteItemFromCart(itemId);
-         });*/
 	},
 
 	addToCart: function() {
@@ -80,6 +69,7 @@ let cartObject =
         					if (response.status == 200) {
         						let message = response["data"];
         						alert(message);
+        						location.reload(true);
         						// window.location.href = "/item/" + itemId;
         						// location = "/item/" + itemId;
         						// console.log(response);

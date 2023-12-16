@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CartService {
@@ -55,8 +54,8 @@ public class CartService {
                 cartItem.addCount(amount);
                 cartItemRepository.save(cartItem);
             }
-            // 카트 상품 총 개수 증가
-            cart.setCount(cart.getCount() + amount);
+            cart = cart.generateCount(-1, cart);
+            cartRepository.save(cart);
         }
         cartRepository.save(cart);
         return cart;
@@ -76,25 +75,19 @@ public class CartService {
         return user_items;
     }
 
-    @Transactional(readOnly = true)
-    public void deleteOneCartItem(Integer itemId) {
-        Cart_item cartItem = cartItemRepository.findById(itemId).orElse(null);
-        System.out.printf("응애!!" + cartItem);
+    @Transactional
+    public void deleteOneCartItem(int id) {
+        System.out.println("Deleting item with ID: " + id);
+        Cart_item cartItem = cartItemRepository.findById(id).get();
+        Cart cart = cartItem.getCart();
+        cartItemRepository.delete(cartItem);
+        cart = cart.generateCount(id, cart);
+        cartRepository.save(cart);
 
 
-
-        // cartItemRepository.dele teById(itemId);
-        if (cartItem != null)
-            cartItemRepository.delete(cartItem);
+        System.out.println("Item deleted successfully.");
     }
 
-    /* public Cart getCartByUserId(int userId) {
-         User user = userRepository.findById(userId)
-                 .orElseThrow(() -> new IllegalArgumentException("Invalid userId: " + userId));
-
-         return cartRepository.findByUserId(userId)
-                 .orElseThrow(() -> new IllegalArgumentException("No cart found for user: " + userId));
-     }*/
     @Transactional(readOnly = true)
     public Cart getCartByUser(User user) {
         return cartRepository.findByUserId(user.getId()).orElse(null);

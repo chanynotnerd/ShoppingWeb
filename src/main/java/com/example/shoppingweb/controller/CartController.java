@@ -1,7 +1,6 @@
 package com.example.shoppingweb.controller;
 
 import com.example.shoppingweb.domain.Cart;
-import com.example.shoppingweb.domain.Cart_item;
 import com.example.shoppingweb.domain.Item;
 import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.dto.CartItemDTO;
@@ -11,7 +10,6 @@ import com.example.shoppingweb.service.ItemService;
 import com.example.shoppingweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 public class CartController {
@@ -58,14 +55,6 @@ public class CartController {
         return "item/getItem";
     }
 
-/*
-    @GetMapping("/user/{userId}")
-    public String getCartByUserId(@PathVariable int userId, Model model) {
-        Cart cart = cartService.getCartByUserId(userId);
-        model.addAttribute("cart", cart);
-        return "cart";
-    }
-*/
 
     @GetMapping("/cart/user")
     public String viewCart(HttpSession session, Model model) {
@@ -86,21 +75,9 @@ public class CartController {
     }
     @DeleteMapping("/cart/item")
     public @ResponseBody ResponseDTO<?> deleteOne(@RequestBody CartItemDTO cartItemDTO){
-        // User user = (User) session.getAttribute("principal");
+
         cartService.deleteOneCartItem(cartItemDTO.getItemId());
         return new ResponseDTO<>(HttpStatus.OK.value(),
-                cartItemDTO.getItemId() + " 삭제.");
-
+                cartItemDTO.getItemId() + "번 항목 삭제.");
     }
-
-
-/*    // 장바구니 보기
-    @GetMapping("/cart/user/{userId}")
-    public String viewCart(@PathVariable("userId") Integer userId, Model model) {
-        User user = userService.findUserById(userId);
-        Cart cart = cartService.getCartByUser(user);
-        model.addAttribute("cart", cart);
-        return "getCart";
-    }*/
-
 }

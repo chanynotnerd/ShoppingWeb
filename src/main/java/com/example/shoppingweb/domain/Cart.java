@@ -1,10 +1,8 @@
 package com.example.shoppingweb.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,4 +34,17 @@ public class Cart {
         cart.setUser(user);
         return cart;
     }
+
+    public Cart generateCount(int id, Cart cart) {
+        List<Cart_item> cartItems = cart.getCartItems();
+        cart.setCount(0);
+        for (Cart_item cartItem : cartItems) {
+            if (id == cartItem.getId()) continue;
+            cart.setCount(cart.getCount() + cartItem.getCount());
+
+        }
+        return cart;
+    }
+
+
 }
