@@ -17,26 +17,21 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/auth/insertUser")
-    public String insertUser()
-    {
+    public String insertUser() {
         return "user/insertUser";
     }
 
 
     @PostMapping("/auth/insertUser")
-    public @ResponseBody ResponseDTO<?> insertUser(@RequestBody User user)
-    {
+    public @ResponseBody ResponseDTO<?> insertUser(@RequestBody User user) {
         User findUser = userService.getUser(user.getUsername());
 
-        if(findUser.getUsername() == null)
-        {
+        if (findUser.getUsername() == null) {
             // 유저 추가
             userService.insertUser(user);
             return new ResponseDTO<>(HttpStatus.OK.value(),
                     user.getUsername() + " 님 회원가입 성공");
-        }
-        else
-        {
+        } else {
             return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(),
                     user.getUsername() + " 님은 이미 회원이십니다.");
         }

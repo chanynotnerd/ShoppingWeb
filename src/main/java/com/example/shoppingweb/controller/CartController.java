@@ -58,12 +58,14 @@ public class CartController {
         return "item/getItem";
     }
 
+/*
     @GetMapping("/user/{userId}")
     public String getCartByUserId(@PathVariable int userId, Model model) {
         Cart cart = cartService.getCartByUserId(userId);
         model.addAttribute("cart", cart);
         return "cart";
     }
+*/
 
     @GetMapping("/cart/user")
     public String viewCart(HttpSession session, Model model) {
@@ -77,12 +79,20 @@ public class CartController {
         Cart cart = cartService.getCartByUser(user);
         if (cart == null) {
             // 사용자에게 할당된 Cart가 없는 경우, 새 Cart를 생성
-            cart = Cart.createCart(user);
-            cartService.insertCart(user, null, 0);
+            cart = cartService.insertCart(user, null, 0);
         }
         model.addAttribute("cart", cart);
         return "cart/getCart";
     }
+    @DeleteMapping("/cart/item")
+    public @ResponseBody ResponseDTO<?> deleteOne(@RequestBody CartItemDTO cartItemDTO){
+        // User user = (User) session.getAttribute("principal");
+        cartService.deleteOneCartItem(cartItemDTO.getItemId());
+        return new ResponseDTO<>(HttpStatus.OK.value(),
+                cartItemDTO.getItemId() + " 삭제.");
+
+    }
+
 
 /*    // 장바구니 보기
     @GetMapping("/cart/user/{userId}")

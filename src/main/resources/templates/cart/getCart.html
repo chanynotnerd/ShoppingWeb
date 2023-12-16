@@ -22,16 +22,18 @@
             </thead>
             <tbody>
             <tr th:each="cartItem : ${cart.cartItems}">
-                <td><img th:src="@{'/image/' + ${cartItem.item.id} + '.png'}" alt="Product Image" style="height: 100px;"/></td>
+                <td><img th:src="@{'/image/' + ${cartItem.item.id} + '.png'}" alt="Product Image"
+                         style="height: 100px;"/></td>
                 <td th:text="${cartItem.item.itemName}"></td>
                 <td th:text="${cartItem.item.price}"></td>
-                <td th:text="${cartItem.count}"></td>
+                <td>
+                    <input type="number" th:value="${cartItem.count}" min="1"
+                           onchange="updateQuantity(this, ${cartItem.item.id})"/>
+                </td>
                 <td th:text="${cartItem.item.price * cartItem.count}"></td>
                 <td>
-                    <form th:action="@{/cart/remove}" method="post">
-                        <input type="hidden" name="itemId" th:value="${cartItem.item.id}" />
-                        <button type="submit" class="btn btn-danger">삭제</button>
-                    </form>
+                    <button id="btn-delete" th:data-cart-item-id=${cartItem.id} class="btn btn-danger">삭제하기
+                    </button>
                 </td>
             </tr>
             </tbody>
@@ -43,5 +45,6 @@
 </div>
 
 <div th:replace="fragment/footer :: footer"></div>
+<script src="/js/cart.js"></script>
 </body>
 </html>

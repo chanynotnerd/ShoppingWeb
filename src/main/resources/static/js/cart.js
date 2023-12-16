@@ -7,6 +7,23 @@ let cartObject =
 		$("#btn-save").on("click", () => {
 			_this.addToCart();
 		});
+		$("#btn-delete").on("click", (e) => {
+
+		        let itemId = $("#btn-delete").data('cart-item-id');
+                alert("aaa"+itemId)
+        	    _this.deleteItem(itemId);
+        });
+
+/*		 $('.update-quantity').on('change', function() {
+             let itemId = $(this).data('item-id');
+             let newQuantity = $(this).val();
+             _this.updateQuantity(itemId, newQuantity);
+         });
+
+         $('.delete-item').on('click', function() {
+             let itemId = $(this).data('item-id');
+             _this.deleteItemFromCart(itemId);
+         });*/
 	},
 
 	addToCart: function() {
@@ -18,7 +35,6 @@ let cartObject =
                     itemId: itemId,
         			amount: $("#amount").val()
         		}
-        		console.log(cart);
 
 				$.ajax({
 					type: "POST",
@@ -50,6 +66,38 @@ let cartObject =
 					alert("에러 발생 : " + error);
 					console.log(error);
 				});
+	},
+	deleteItem : function(itemId) {
+        $.ajax({
+        					type: "DELETE",
+        					url: `/cart/item`,
+        					data:JSON.stringify({itemId}),
+        					contentType: "application/json; charset=utf-8"
+        				}).done(function(response) {
+        				/*console.log(response);
+        				console.log("Request URL:", url);*/
+        					// let status = response["status"];
+        					if (response.status == 200) {
+        						let message = response["data"];
+        						alert(message);
+        						// window.location.href = "/item/" + itemId;
+        						// location = "/item/" + itemId;
+        						// console.log(response);
+        					}
+        					else {
+        					alert("문제가 있습니다.");
+        						let warn = "";
+        						let errors = response["data"];
+        						if (errors.userId != null) warn = warn + errors.userId + "\n";
+        						if (errors.itemId != null) warn = warn + errors.itemId + "\n";
+        						if (errors.amount != null) warn = warn + errors.amount;
+        						alert(warn);
+        					}
+
+        				}).fail(function(error) {
+        					alert("에러 발생 : " + error);
+        					console.log(error);
+        				});
 	}
 }
 

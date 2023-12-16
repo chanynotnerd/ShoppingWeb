@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
 
 public class Cart {
@@ -21,14 +20,14 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
     private User user;
 
     private int count;  // 항목에 대한 수(A상품, B상품 총 2개)
 
-    @Builder.Default
-    @OneToMany(mappedBy = "cart")
+
+    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)
     private List<Cart_item> cartItems = new ArrayList<>();
 
     public static Cart createCart(User user) {
