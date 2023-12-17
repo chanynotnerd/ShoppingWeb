@@ -9,16 +9,19 @@ let cartObject =
 		});
 
 
-		$("#btn-delete").on("click", (e) => {
+		/*$("#btn-delete").on("click", (e) => {
 		        let itemId = $("#btn-delete").data('cart-item-id');
-        	    _this.deleteItem(itemId);
+        	    _this.deleteItem(itemId);*/
+
+        // $(document)로 생성되는 모든 버튼에 대해 이벤트 적용
+        $(document).on('click', "#btn-delete", (e) => {
+        			let itemId = $(e.target).data('cart-item-id');
+        			_this.deleteItem(itemId);
         });
 	},
 
 	addToCart: function() {
 		        alert("장바구니에 제품이 담겼습니다.");
-		        /*let form = $("form"); // form 요소 선택
-                let url = form.attr('action'); // form의 action 속성 사용*/
         		let cart = {	// user 객체 선언
                     userId: userId,
                     itemId: itemId,
@@ -58,10 +61,10 @@ let cartObject =
 	},
 	deleteItem : function(itemId) {
         $.ajax({
-        					type: "DELETE",
-        					url: `/cart/item`,
-        					data:JSON.stringify({itemId}),
-        					contentType: "application/json; charset=utf-8"
+        			type: "DELETE",
+        			url: `/cart/item`,
+        			data:JSON.stringify({itemId}),
+        			contentType: "application/json; charset=utf-8"
         				}).done(function(response) {
         				/*console.log(response);
         				console.log("Request URL:", url);*/
@@ -70,9 +73,6 @@ let cartObject =
         						let message = response["data"];
         						alert(message);
         						location.reload(true);
-        						// window.location.href = "/item/" + itemId;
-        						// location = "/item/" + itemId;
-        						// console.log(response);
         					}
         					else {
         					alert("문제가 있습니다.");

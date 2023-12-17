@@ -28,7 +28,7 @@
                 <td th:text="${cartItem.item.price}"></td>
                 <td>
                     <input type="number" th:value="${cartItem.count}" min="1"
-                           onchange="updateQuantity(this, ${cartItem.item.id})"/>
+                           onchange="updatecount(this, ${cartItem.item.id})"/>
                 </td>
                 <td th:text="${cartItem.item.price * cartItem.count}"></td>
                 <td>
