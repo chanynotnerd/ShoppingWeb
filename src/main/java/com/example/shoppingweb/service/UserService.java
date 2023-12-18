@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
 @Service
@@ -48,4 +47,15 @@ public class UserService {
         user.setRole(RoleType.USER);
         userRepository.save(user);
     }
+
+    /*@Transactional
+    public User updateUser(User user)
+    {
+        User findUser=userRepository.findById(user.getId()).get();
+        findUser.setUsername(user.getUsername());
+        findUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        findUser.setEmail(user.getEmail());
+
+        return findUser;
+    }*/
 }

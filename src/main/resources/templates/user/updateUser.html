@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragment/head :: head"></div>
+</head>
+<body>
+<!-- Include the header fragment -->
+<div th:replace="fragment/header :: header"></div>
+<div class="container mt-3">
+    <form>
+        <div class="mb-3">
+            <label for="username">Username:</label>
+            <input class="form-control" id="username" name="username" placeholder="Enter username"
+                   th:value="${principal.user.username}" type="hidden">
+        </div>
+        <div class="mb-3">
+            <label for="password">Password:</label>
+            <input class="form-control" id="password" name="password" placeholder="Enter password" type="password">
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="email">Email:</label>
+            <input class="form-control" id="email" name="email" placeholder="Enter email" th:value="${principal.user.username}"
+                   type="email">
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="postcode">우편번호:</label>
+            <input class="form-control" id="sample6_postcode" name="postcode" placeholder="우편번호" th:value="${principal.user.postcode}"
+                   type="text">
+            <input onclick="userObject.execDaumPostcode()" type="button" value="우편번호 찾기"><br>
+            <label for="address">주소:</label>
+            <input class="form-control" id="sample6_address" name="address" placeholder="주소" th:value="${principal.user.address}"
+                   type="text"><br>
+            <label for="detailAddress">상세주소:</label>
+            <input class="form-control" id="sample6_detailAddress" name="detailAddress" placeholder="상세주소" th:value="${principal.user.detailAddress}"
+                   type="text">
+        </div>
+    </form>
+
+    <button class="btn btn-secondary" id="btn-update">회원 정보 수정</button>
+</div>
+<!-- Include the footer fragment -->
+<div th:replace="fragment/footer :: footer"></div>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/js/user.js"></script>
+</body>
+</html>

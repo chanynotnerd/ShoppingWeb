@@ -21,7 +21,7 @@ let cartObject =
 	},
 
 	addToCart: function() {
-		        alert("장바구니에 제품이 담겼습니다.");
+		        // alert("장바구니에 제품이 담겼습니다.");
         		let cart = {	// user 객체 선언
                     userId: userId,
                     itemId: itemId,

@@ -46,7 +46,7 @@ public class CartController {
         User user = userService.findUserById(cartItemDTO.getUserId());
         Item item = itemService.getItem(cartItemDTO.getItemId());
         cartService.insertCart(user, item, cartItemDTO.getAmount());
-        return new ResponseDTO<>(HttpStatus.OK.value(), "success");
+        return new ResponseDTO<>(HttpStatus.OK.value(), "장바구니에 제품이 담겼습니다.");
     }
 
     @GetMapping("/cart/add")

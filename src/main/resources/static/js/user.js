@@ -35,7 +35,7 @@ let userObject =
 			email: $("#email").val(),
 			postcode: $("#sample6_postcode").val(),
                         address: $("#sample6_address").val(),
-                        detailAddress: $("#sample6_detailAddress").val(),
+                        detailAddress: $("#sample6_detailAddress").val()
 		}
 		$.ajax({
 			type: "POST",
@@ -64,13 +64,14 @@ let userObject =
 	},
 
 	updateUser: function() {
-		alert("회원 정보 수정 요청");
-		let user = {
-			id: $("#id").val(),
-			username: $("#username").val(),
-			password: $("#password").val(),
-			email: $("#email").val()
-		}
+		let user = {	// user 객체 선언
+        			username: $("#username").val(),
+        			password: $("#password").val(),
+        			email: $("#email").val(),
+        			postcode: $("#sample6_postcode").val(),
+                                address: $("#sample6_address").val(),
+                                detailAddress: $("#sample6_detailAddress").val()
+        		}
 
 		$.ajax({
 			type: "PUT",

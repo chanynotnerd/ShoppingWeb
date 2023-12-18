@@ -48,13 +48,13 @@ public class CartService {
             if (cartItem == null) {
                 cartItem = Cart_item.createCartItem(cart, item, amount);
                 cartItemRepository.save(cartItem);
+                cart.getCartItems().add(cartItem);
             }
             // 상품이 장바구니에 이미 존재한다면 수량만 증가
             else {
                 cartItem.addCount(amount);
                 cartItemRepository.save(cartItem);
             }
-            cart.getCartItems().add(cartItem);
             cart = cart.generateCount(-1, cart);
             cartRepository.saveAndFlush(cart);
         }
