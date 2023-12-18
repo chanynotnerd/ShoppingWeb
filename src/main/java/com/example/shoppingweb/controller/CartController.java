@@ -1,6 +1,7 @@
 package com.example.shoppingweb.controller;
 
 import com.example.shoppingweb.domain.Cart;
+import com.example.shoppingweb.domain.Cart_item;
 import com.example.shoppingweb.domain.Item;
 import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.dto.CartItemDTO;
@@ -70,6 +71,12 @@ public class CartController {
             cart = cartService.insertCart(user, null, 0);
         }
         model.addAttribute("cart", cart);
+
+        int total = 0;
+        for (Cart_item cartItem : cart.getCartItems()) {
+            total += cartItem.getItem().getPrice() * cartItem.getCount();
+        }
+        model.addAttribute("total", total);
         return "cart/getCart";
     }
     @DeleteMapping("/cart/item")

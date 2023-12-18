@@ -28,19 +28,28 @@
                 <td id=itemName th:data-cart-item-idendififyNum="${cartItem.item.id}"
                     th:text="${cartItem.item.id}"></td>
                 <td th:text="${cartItem.item.itemName}"></td>
-                <td th:text="${cartItem.item.price}"></td>
+                <td th:text="${cartItem.item.price} + ' 원'"></td>
                 <td>
                     <input min="1" name="amount" th:id="'count' + ${cartItem.item.id}" th:value="${cartItem.count}"
                            type="number"/>
                     <button class="btn btn-warning" id="btn-update" th:data-cart-item-id=${cartItem.item.id}>변경</button>
                 </td>
-                <td th:text="${cartItem.item.price * cartItem.count}"></td>
+                <td th:text="${cartItem.item.price * cartItem.count} + ' 원'"></td>
                 <td>
                     <button id="btn-delete" th:data-cart-item-id=${cartItem.id} class="btn btn-danger">삭제하기
                     </button>
                 </td>
             </tr>
             </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5">장바구니 총 금액</td>
+                <td th:text="${#numbers.formatDecimal(total, 1, 'COMMA', 0, 'POINT')} + ' 원'"></td>
+                <td>
+                    <button class="btn btn-success" id="btn-order">주문하기</button>
+                </td>
+            </tr>
+            </tfoot>
         </table>
     </div>
     <div th:unless="${not #lists.isEmpty(cart.cartItems)}">
