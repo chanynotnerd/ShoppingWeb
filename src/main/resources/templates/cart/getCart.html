@@ -13,6 +13,7 @@
             <thead>
             <tr>
                 <th>사진</th>
+                <th>번호</th>
                 <th>제품명</th>
                 <th>가격</th>
                 <th>수량</th>
@@ -24,11 +25,14 @@
             <tr th:each="cartItem : ${cart.cartItems}">
                 <td><img th:src="@{'/image/' + ${cartItem.item.id} + '.png'}" alt="Product Image"
                          style="height: 100px;"/></td>
+                <td id=itemName th:data-cart-item-idendififyNum="${cartItem.item.id}"
+                    th:text="${cartItem.item.id}"></td>
                 <td th:text="${cartItem.item.itemName}"></td>
                 <td th:text="${cartItem.item.price}"></td>
                 <td>
-                    <input type="number" th:value="${cartItem.count}" min="1"
-                           onchange="updatecount(this, ${cartItem.item.id})"/>
+                    <input min="1" name="amount" th:id="'count' + ${cartItem.item.id}" th:value="${cartItem.count}"
+                           type="number"/>
+                    <button class="btn btn-warning" id="btn-update" th:data-cart-item-id=${cartItem.item.id}>변경</button>
                 </td>
                 <td th:text="${cartItem.item.price * cartItem.count}"></td>
                 <td>
@@ -43,7 +47,9 @@
         <p>장바구니에 아이템이 없습니다.</p>
     </div>
 </div>
-
+<script th:inline="javascript">
+    window.userId = [[${session.principal.id}]];
+</script>
 <div th:replace="fragment/footer :: footer"></div>
 <script src="/js/cart.js"></script>
 </body>

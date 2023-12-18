@@ -24,7 +24,6 @@ public class CartController {
     private CartService cartService;
     @Autowired
     private UserService userService;
-
     @Autowired
     private ItemService itemService;
 
@@ -42,7 +41,7 @@ public class CartController {
             if (cartItemDTO.getItemId() == null) errors.put("itemId", "Item ID is missing");
             return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errors);
         }
-
+        System.out.println(cartItemDTO); // 클라이언트가 보낸 데이터 출력
         User user = userService.findUserById(cartItemDTO.getUserId());
         Item item = itemService.getItem(cartItemDTO.getItemId());
         cartService.insertCart(user, item, cartItemDTO.getAmount());
@@ -63,7 +62,7 @@ public class CartController {
             // 로그인하지 않은 사용자의 경우, 로그인 페이지로 리다이렉트
             return "redirect:/auth/login";
         }
-
+        model.addAttribute("userId", userId);
         User user = userService.findUserById(userId);
         Cart cart = cartService.getCartByUser(user);
         if (cart == null) {
@@ -79,5 +78,21 @@ public class CartController {
         cartService.deleteOneCartItem(cartItemDTO.getItemId());
         return new ResponseDTO<>(HttpStatus.OK.value(),
                 cartItemDTO.getItemId() + "번 항목 삭제.");
+    }
+
+    @PatchMapping("/cart/updateCount")
+    public @ResponseBody ResponseDTO<?> updateCartItemCount(@RequestBody CartItemDTO cartItemDTO) {
+        System.out.println(cartItemDTO); // 클라이언트가 보낸 데이터 출력
+        if (cartItemDTO.getUserId() == null || cartItemDTO.getItemId() == null) {
+            Map<String, String> errors = new HashMap<>();
+            if (cartItemDTO.getUserId() == null) errors.put("userId", "User ID is missing");
+            if (cartItemDTO.getItemId() == null) errors.put("itemId", "Item ID is missing");
+            return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errors);
+        }
+        User user = userService.findUserById(cartItemDTO.getUserId());
+        Item item = itemService.getItem(cartItemDTO.getItemId());
+
+        cartService.updateCartItemCount(user, item, cartItemDTO.getAmount());
+        return new ResponseDTO<>(HttpStatus.OK.value(), cartItemDTO.getItemId() + "번 항목 수량 변경.");
     }
 }

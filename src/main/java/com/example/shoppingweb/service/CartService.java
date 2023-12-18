@@ -54,8 +54,9 @@ public class CartService {
                 cartItem.addCount(amount);
                 cartItemRepository.save(cartItem);
             }
+            cart.getCartItems().add(cartItem);
             cart = cart.generateCount(-1, cart);
-            cartRepository.save(cart);
+            cartRepository.saveAndFlush(cart);
         }
         cartRepository.save(cart);
         return cart;
@@ -86,6 +87,21 @@ public class CartService {
 
 
         System.out.println("Item deleted successfully.");
+    }
+
+    @Transactional
+    public Cart updateCartItemCount(User user, Item newItem, int amount) {
+        // System.out.println("Updating item with ID: " + id);
+        // 유저 id로 해당 유저의 장바구니 찾기
+        Cart cart = cartRepository.findByUserId(user.getId()).orElse(null);
+        Item item = itemRepository.findById(newItem.getId()).orElse(null);
+
+        Cart_item cartItem = cartItemRepository.findByCart_IdAndItem_Id(cart.getId(), item.getId());
+
+        cartItem.setCount(amount);
+        cart = cart.generateCount(user.getId(), cart);
+        cartItemRepository.save(cartItem);
+        return cart;
     }
 
     @Transactional(readOnly = true)

@@ -1,7 +1,6 @@
 package com.example.shoppingweb.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,11 +14,11 @@ public class Cart_item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cartid")
     private Cart cart;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "itemid")
     private Item item;
 
@@ -52,4 +51,7 @@ public class Cart_item {
         return this.count;
     }
 
+    public void setCount(int count) {
+        this.count = count;
+    }
 }

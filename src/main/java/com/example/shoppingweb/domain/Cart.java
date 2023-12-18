@@ -18,14 +18,14 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userid")
     private User user;
 
     private int count;  // 항목에 대한 수(A상품, B상품 총 2개)
 
 
-    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
     private List<Cart_item> cartItems = new ArrayList<>();
 
     public static Cart createCart(User user) {
