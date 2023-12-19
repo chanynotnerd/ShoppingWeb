@@ -17,6 +17,8 @@
             <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
         </div>
         <button class="btn btn-secondary" id="btn-login" th:text="#{user.login.form.login_btn}"></button>
+        <a th:href="@{https://kauth.kakao.com/oauth/authorize(response_type=code, client_id='7726cc35fb60a4fcf57862d725f173de', redirect_uri='http://localhost:8080/oauth/kakao')}">
+            <img height="38px" th:src="@{/image/kakao_login_btn.png}"></a>
     </form>
 </div>
 <!-- Include the footer fragment -->

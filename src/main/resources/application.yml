@@ -38,3 +38,8 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
     show-sql: false
+
+# 카카오 비밀번호
+kakao:
+  default:
+    password: kakao123
