@@ -25,4 +25,16 @@ public class UserDTO {
     @NotBlank(message = "Email은 필수 입력 항목입니다.")
     @Email(message = "이메일 형식이 아닙니다.")
     private String email;
+
+    @NotNull(message = "우편번호가 전달되지 않았습니다.")
+    @NotBlank(message = "우편번호는 필수 입력 항목입니다.")
+    private String postcode;
+
+    @NotNull(message = "주소가 전달되지 않았습니다.")
+    @NotBlank(message = "주소는 필수 입력 항목입니다.")
+    private String address;
+
+    @NotNull(message = "상세주소가 전달되지 않았습니다.")
+    @NotBlank(message = "상세주소는 필수 입력 항목입니다.")
+    private String detailAddress;
 }
