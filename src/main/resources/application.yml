@@ -21,11 +21,9 @@ spring:
     enabled: true
     prefix: classpath:/templates/
     suffix: .html
-    cache: false # 개발 중에는 캐시 비활성화를 권장합니다.
+    cache: false
     mode: DEBUG
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+
   datasource:
     password: 1234
     url: jdbc:mysql://127.0.0.1:3306/shopping_web?serverTimezone=UTC

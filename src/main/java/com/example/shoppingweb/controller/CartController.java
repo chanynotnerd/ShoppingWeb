@@ -61,7 +61,7 @@ public class CartController {
         Integer userId = getLoggedInUserId(session);
         if (userId == null) {
             // 로그인하지 않은 사용자의 경우, 로그인 페이지로 리다이렉트
-            return "redirect:/auth/login";
+            return "/";
         }
         model.addAttribute("userId", userId);
         User user = userService.findUserById(userId);

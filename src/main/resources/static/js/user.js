@@ -54,7 +54,10 @@ let userObject =
 				let errors = response["data"];
 				if (errors.username != null) warn = warn + errors.username + "\n";
 				if (errors.password != null) warn = warn + errors.password + "\n";
-				if (errors.email != null) warn = warn + errors.email;
+				if (errors.email != null) warn = warn + errors.email + "\n";
+				if (errors.postcode != null) warn = warn + errors.postcode + "\n";
+				if (errors.address != null) warn = warn + errors.address + "\n";
+				if (errors.detailAddress != null) warn = warn + errors.detailAddress;
 				alert(warn);
 			}
 

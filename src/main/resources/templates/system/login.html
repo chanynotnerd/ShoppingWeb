@@ -7,21 +7,19 @@
 <!-- Include the header fragment -->
 <div th:replace="fragment/header :: header"></div>
 <div class="container mt-3">
-    <form>
+    <form action="/auth/securitylogin" method="post">
         <div class="mb-3">
-            <label for ="username">Username:</label>
+            <span th:text="#{user.login.form.username}"></span>
             <input type="text" class="form-control" id="username" placeholder="Enter username" name="username">
         </div>
         <div class="mb-3">
-            <label for="password">Password:</label>
+            <span th:text="#{user.login.form.password}"></span>
             <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
         </div>
+        <button class="btn btn-secondary" id="btn-login" th:text="#{user.login.form.login_btn}"></button>
     </form>
-
-    <button id="btn-login" class="btn btn-secondary">로그인</button>
 </div>
 <!-- Include the footer fragment -->
 <div th:replace="fragment/footer :: footer"></div>
-<script src="/js/login.js"></script>
 </body>
 </html>
