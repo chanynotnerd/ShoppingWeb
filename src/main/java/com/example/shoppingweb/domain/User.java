@@ -1,7 +1,6 @@
 package com.example.shoppingweb.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -30,14 +29,15 @@ public class User {
     @Column(nullable = false, length = 100)
     private String email;
 
-    @Column(nullable = false, length = 6)
+    // postcode, address, detailAddress는 OAuth 로그인 때문에 null값 허용
+    @Column(nullable = true, length = 6)
     private String postcode;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = true, length = 100)
     private String address;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String detailAddress;
 
     @Enumerated(EnumType.STRING)

@@ -62,7 +62,6 @@ public class UserService {
     @Transactional
     public void insertUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         user.setRole(RoleType.USER);
         userRepository.save(user);
     }
