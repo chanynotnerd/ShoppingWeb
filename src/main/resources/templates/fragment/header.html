@@ -36,6 +36,7 @@
                 </ul>
             </div>
             <div th:if="${#authentication.name != 'anonymousUser'}">
+                <p th:text="'Logged in as ' + ${#authentication.name}"></p>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li hidden="hidden" th:text="${session.principal}">
                     <li class="nav-item"><a class="nav-link" href="/auth/updateUser">회원상세</a></li>

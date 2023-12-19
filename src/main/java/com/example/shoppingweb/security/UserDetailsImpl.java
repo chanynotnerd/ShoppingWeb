@@ -1,12 +1,16 @@
 package com.example.shoppingweb.security;
 
 import com.example.shoppingweb.domain.User;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Getter
+@Setter
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
     private User user;
@@ -15,9 +19,14 @@ public class UserDetailsImpl implements UserDetails {
         this.user = user;
     }
 
+    public int getId() {
+        return user.getId();
+    }
+
     @Override
     public String getPassword() {
-        return "{noop}" + user.getPassword();
+        return user.getPassword();
+        //return "{noop}" + user.getPassword();
     }
 
     @Override
@@ -25,6 +34,21 @@ public class UserDetailsImpl implements UserDetails {
         return user.getUsername();
     }
 
+    public String getEmail() {
+        return user.getEmail();
+    }
+
+    public String getPostcode() {
+        return user.getPostcode();
+    }
+
+    public String getAddress() {
+        return user.getAddress();
+    }
+
+    public String getDetailAddress() {
+        return user.getDetailAddress();
+    }
     // 계정이 만료되지 않았는지 반환
     @Override
     public boolean isAccountNonExpired() {

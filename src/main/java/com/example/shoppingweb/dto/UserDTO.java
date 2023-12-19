@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 public class UserDTO {
     @NotNull(message = "Username이 전달되지 않았습니다.")
     @NotBlank(message = "Username은 필수 입력 항목입니다.")
-    @Size(min = 6, max = 15, message = "Username은 여섯 글자 이상 15자 미만으로 입력하세요.")
+    @Size(min = 5, max = 15, message = "Username은 다섯 글자 이상 15자 미만으로 입력하세요.")
     private String username;
 
     @NotNull(message = "Password 파라미터가 전달되지 않았습니다.")
@@ -30,6 +30,7 @@ public class UserDTO {
 
     @NotNull(message = "우편번호가 전달되지 않았습니다.")
     @NotBlank(message = "우편번호는 필수 입력 항목입니다.")
+    @Size(min = 5, max = 5, message = "postcode는 다섯 글자로 입력하세요.")
     private String postcode;
 
     @NotNull(message = "주소가 전달되지 않았습니다.")

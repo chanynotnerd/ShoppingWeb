@@ -3,17 +3,16 @@ package com.example.shoppingweb.controller;
 import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.dto.ResponseDTO;
 import com.example.shoppingweb.dto.UserDTO;
+import com.example.shoppingweb.security.UserDetailsImpl;
 import com.example.shoppingweb.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -26,6 +25,21 @@ public class UserController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @PutMapping("/user")
+    public @ResponseBody ResponseDTO<?> updateUser(@RequestBody User user,
+                                                   @AuthenticationPrincipal UserDetailsImpl principal) {
+        System.out.println("세션 정보: " + principal);
+        principal.setUser(userService.updateUser(user));
+        // userService.updateUser(user);
+        return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 회원 수정 완료");
+    }
+
+
+    @GetMapping("auth/updateUser")
+    public String updateUser() {
+        return "user/updateUser";
+    }
 
     @GetMapping("/auth/login")
     public String login() {

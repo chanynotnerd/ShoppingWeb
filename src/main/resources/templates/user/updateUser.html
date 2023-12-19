@@ -8,10 +8,11 @@
 <div th:replace="fragment/header :: header"></div>
 <div class="container mt-3">
     <form>
+        <input id="id" th:value="${#authentication.principal.id}" type="hidden">
         <div class="mb-3">
             <label for="username">Username:</label>
             <input class="form-control" id="username" name="username" placeholder="Enter username"
-                   th:value="${principal.user.username}" type="hidden">
+                   th:value="${#authentication.principal.username}">
         </div>
         <div class="mb-3">
             <label for="password">Password:</label>
@@ -19,19 +20,19 @@
         </div>
         <div class="mb-3 mt-3">
             <label for="email">Email:</label>
-            <input class="form-control" id="email" name="email" placeholder="Enter email" th:value="${principal.user.username}"
+            <input class="form-control" id="email" name="email" placeholder="Enter email" th:value="${#authentication.principal.email}"
                    type="email">
         </div>
         <div class="mb-3 mt-3">
             <label for="postcode">우편번호:</label>
-            <input class="form-control" id="sample6_postcode" name="postcode" placeholder="우편번호" th:value="${principal.user.postcode}"
+            <input class="form-control" id="sample6_postcode" name="postcode" placeholder="우편번호" th:value="${#authentication.principal.postcode}"
                    type="text">
             <input onclick="userObject.execDaumPostcode()" type="button" value="우편번호 찾기"><br>
             <label for="address">주소:</label>
-            <input class="form-control" id="sample6_address" name="address" placeholder="주소" th:value="${principal.user.address}"
+            <input class="form-control" id="sample6_address" name="address" placeholder="주소" th:value="${#authentication.principal.address}"
                    type="text"><br>
             <label for="detailAddress">상세주소:</label>
-            <input class="form-control" id="sample6_detailAddress" name="detailAddress" placeholder="상세주소" th:value="${principal.user.detailAddress}"
+            <input class="form-control" id="sample6_detailAddress" name="detailAddress" placeholder="상세주소" th:value="${#authentication.principal.detailAddress}"
                    type="text">
         </div>
     </form>

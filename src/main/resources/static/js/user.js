@@ -68,6 +68,7 @@ let userObject =
 
 	updateUser: function() {
 		let user = {	// user 객체 선언
+		            id: $("#id").val(),
         			username: $("#username").val(),
         			password: $("#password").val(),
         			email: $("#email").val(),
