@@ -57,7 +57,7 @@
     </div>
 </div>
 <script th:inline="javascript">
-    window.userId = [[${session.principal.id}]];
+    window.userId = [[${userId}]];
 </script>
 <div th:replace="fragment/footer :: footer"></div>
 <script src="/js/cart.js"></script>

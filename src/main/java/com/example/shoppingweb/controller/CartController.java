@@ -6,11 +6,14 @@ import com.example.shoppingweb.domain.Item;
 import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.dto.CartItemDTO;
 import com.example.shoppingweb.dto.ResponseDTO;
+import com.example.shoppingweb.security.UserDetailsImpl;
 import com.example.shoppingweb.service.CartService;
 import com.example.shoppingweb.service.ItemService;
 import com.example.shoppingweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +60,28 @@ public class CartController {
 
 
     @GetMapping("/cart/user")
+    public String viewCart(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        User user = userService.findUserById(userDetails.getId());
+        Cart cart = cartService.getCartByUser(user);
+        if (cart == null) {
+            // 사용자에게 할당된 Cart가 없는 경우, 새 Cart를 생성
+            cart = cartService.insertCart(user, null, 0);
+        }
+        model.addAttribute("cart", cart);
+        model.addAttribute("userId", user.getId()); // 사용자 ID를 모델에 추가
+
+        int total = 0;
+        for (Cart_item cartItem : cart.getCartItems()) {
+            total += cartItem.getItem().getPrice() * cartItem.getCount();
+        }
+        model.addAttribute("total", total);
+        return "cart/getCart";
+    }
+
+    /*@GetMapping("/cart/user")
     public String viewCart(HttpSession session, Model model) {
         Integer userId = getLoggedInUserId(session);
         if (userId == null) {
@@ -78,7 +103,7 @@ public class CartController {
         }
         model.addAttribute("total", total);
         return "cart/getCart";
-    }
+    }*/
     @DeleteMapping("/cart/item")
     public @ResponseBody ResponseDTO<?> deleteOne(@RequestBody CartItemDTO cartItemDTO){
 
