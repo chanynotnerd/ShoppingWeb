@@ -12,8 +12,7 @@ import com.example.shoppingweb.service.ItemService;
 import com.example.shoppingweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,50 +59,26 @@ public class CartController {
 
 
     @GetMapping("/cart/user")
-    public String viewCart(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    public String viewCart(@AuthenticationPrincipal UserDetailsImpl principal, Model model) {
 
-        User user = userService.findUserById(userDetails.getId());
-        Cart cart = cartService.getCartByUser(user);
+        User user = userService.findUserById(principal.getId());  // userDetails에 있는 사용자 아이디를 DB에서 가져옴
+        Cart cart = cartService.getCartByUser(user);    // 사용자의 장바구니를 가져옴.
         if (cart == null) {
             // 사용자에게 할당된 Cart가 없는 경우, 새 Cart를 생성
             cart = cartService.insertCart(user, null, 0);
         }
-        model.addAttribute("cart", cart);
-        model.addAttribute("userId", user.getId()); // 사용자 ID를 모델에 추가
+        model.addAttribute("cart", cart);   // 가져온 장바구니 프론트에 출력
+        model.addAttribute("userId", user.getId()); // 사용자 아이디를 프론트에 넘겨줌, 데이터 주고받기 위함
 
+        // 장바구니 내 수량과 상품의 가격을 적용한 총 금액 출력
         int total = 0;
         for (Cart_item cartItem : cart.getCartItems()) {
             total += cartItem.getItem().getPrice() * cartItem.getCount();
         }
-        model.addAttribute("total", total);
+        model.addAttribute("total", total); // 총 금액 프론트에 출력
         return "cart/getCart";
     }
 
-    /*@GetMapping("/cart/user")
-    public String viewCart(HttpSession session, Model model) {
-        Integer userId = getLoggedInUserId(session);
-        if (userId == null) {
-            // 로그인하지 않은 사용자의 경우, 로그인 페이지로 리다이렉트
-            return "/";
-        }
-        model.addAttribute("userId", userId);
-        User user = userService.findUserById(userId);
-        Cart cart = cartService.getCartByUser(user);
-        if (cart == null) {
-            // 사용자에게 할당된 Cart가 없는 경우, 새 Cart를 생성
-            cart = cartService.insertCart(user, null, 0);
-        }
-        model.addAttribute("cart", cart);
-
-        int total = 0;
-        for (Cart_item cartItem : cart.getCartItems()) {
-            total += cartItem.getItem().getPrice() * cartItem.getCount();
-        }
-        model.addAttribute("total", total);
-        return "cart/getCart";
-    }*/
     @DeleteMapping("/cart/item")
     public @ResponseBody ResponseDTO<?> deleteOne(@RequestBody CartItemDTO cartItemDTO){
 

@@ -21,7 +21,7 @@
                         <div class="text-center">
                             <!-- Product name, price-->
                             <h5 class="fw-bolder" th:text="${item.itemName}"></h5>
-                            <span th:text="${item.price + ' 원'}"></span>
+                            <td th:text="${#numbers.formatDecimal(item.price, 1, 'COMMA', 0, 'POINT')} + ' 원'"></td>
                         </div>
                     </div>
                     <!-- Product buttons-->

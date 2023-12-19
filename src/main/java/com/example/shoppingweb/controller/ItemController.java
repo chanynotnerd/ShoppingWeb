@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,26 +39,10 @@ public class ItemController {
     }
 
     @GetMapping("/item/{id}")
-    public String getItem(@PathVariable int id, Model model) {
-        /*Item item = itemService.getItem(id);
-        User user = userService.getCurrentUser(request); // 현재 사용자를 가져옵니다.
-        model.addAttribute("item", item);
-        model.addAttribute("user", user); // "user"라는 이름으로 User 객체를 모델에 추가
-        return "item/getItem";*/
-
-        /*model.addAttribute("item", itemService.getItem(id));
-        User user = userService.getCurrentUser(request);
-        model.addAttribute("user", user);
-        return "item/getItem";*/
-
-        model.addAttribute("item", itemService.getItem(id));
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        model.addAttribute("user", userDetails);
+    public String getItem(@PathVariable int id, Model model, @AuthenticationPrincipal UserDetailsImpl principal) {
+        model.addAttribute("item", itemService.getItem(id));    // 해당 정보의 상품 프론트 출력
+        model.addAttribute("user", principal);    // 사용자 아이디를 프론트에 넘겨줌, 데이터 주고받기 위함
 
         return "item/getItem";
-
     }
 }
