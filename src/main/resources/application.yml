@@ -43,3 +43,5 @@ spring:
 kakao:
   default:
     password: kakao123
+
+Secret_Key: 01020441850

@@ -28,7 +28,6 @@ public class UserController {
                                                    @AuthenticationPrincipal UserDetailsImpl principal) {
         System.out.println("세션 정보: " + principal);
         principal.setUser(userService.updateUser(user));
-        // userService.updateUser(user);
         return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 회원 수정 완료");
     }
 

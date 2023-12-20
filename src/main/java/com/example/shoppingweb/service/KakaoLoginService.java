@@ -1,5 +1,6 @@
 package com.example.shoppingweb.service;
 
+import com.example.shoppingweb.domain.OAuthToken;
 import com.example.shoppingweb.domain.RoleType;
 import com.example.shoppingweb.domain.User;
 import com.google.gson.Gson;
@@ -21,8 +22,8 @@ public class KakaoLoginService {
     private String kakaoPassword;
 
 
-    public String getAccessToken(String code) {
-        // HttpHGeaders 생성(MIME 종류)
+    public OAuthToken getTokens(String code) {
+        // HttpHeaders 생성(MIME 종류)
         HttpHeaders header = new HttpHeaders();
         header.add("content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
@@ -54,7 +55,47 @@ public class KakaoLoginService {
         Gson gsonobj = new Gson();
         Map<?, ?> data = gsonobj.fromJson(jsonData, Map.class);
 
-        return (String) data.get("access_token");
+        OAuthToken oAuthToken = new OAuthToken();
+        oAuthToken.setAccessToken((String) data.get("access_token"));
+        oAuthToken.setRefreshToken((String) data.get("refresh_token"));
+
+        return oAuthToken;
+    }
+
+    public OAuthToken refreshAccessToken(String refreshToken) {
+        HttpHeaders refreshHeader = new HttpHeaders();
+        refreshHeader.add("content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        LinkedMultiValueMap<String, String> refreshBody = new LinkedMultiValueMap<>();
+
+        refreshBody.add("grant_type", "refresh_token");
+        refreshBody.add("client_id", "7726cc35fb60a4fcf57862d725f173de");
+        refreshBody.add("refresh_token", refreshToken);
+
+        HttpEntity<MultiValueMap<String, String>> requestRefreshEntity = new HttpEntity<>(refreshBody, refreshHeader);
+
+        // RestTemplate을 이용하면 브라우저 없이 HTTP 요청을 처리할 수 있다.
+        RestTemplate restTemplate = new RestTemplate();
+
+        // HTTP 요청 및 응답 받기
+        ResponseEntity<String> responseRefreshEntity = restTemplate.exchange(
+                "https://kauth.kakao.com/oauth/token", // 엑세스 토큰 요청 주소
+                HttpMethod.POST, // 요청 방식
+                requestRefreshEntity, // 요청 헤더와 바디
+                String.class // 응답받을 타입
+        );
+        // HTTP 응답 본문(body) 정보 반환
+        String jsonData = responseRefreshEntity.getBody();
+
+        // JSON 데이터에서 엑세스토큰 정보 추출
+        Gson gsonobj = new Gson();
+        Map<?, ?> data = gsonobj.fromJson(jsonData, Map.class);
+
+        OAuthToken oAuthToken = new OAuthToken();
+        oAuthToken.setAccessToken((String) data.get("access_token"));
+        oAuthToken.setRefreshToken((String) data.get("refresh_token"));
+
+        return oAuthToken;
     }
 
     public User getUserInfo(String accessToken) {
@@ -95,6 +136,5 @@ public class KakaoLoginService {
         user.setEmail(email);
         user.setRole(RoleType.USER);
         return user;
-
     }
 }
