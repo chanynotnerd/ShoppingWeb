@@ -1,12 +1,14 @@
 package com.example.shoppingweb.controller;
 
 import com.example.shoppingweb.domain.User;
+import com.example.shoppingweb.dto.OAuthType;
 import com.example.shoppingweb.dto.ResponseDTO;
 import com.example.shoppingweb.dto.UserDTO;
 import com.example.shoppingweb.security.UserDetailsImpl;
 import com.example.shoppingweb.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,10 +25,18 @@ public class UserController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Value("${kakao.default.password}")
+    private String kakaoPassword;
+
     @PutMapping("/user")
     public @ResponseBody ResponseDTO<?> updateUser(@RequestBody User user,
                                                    @AuthenticationPrincipal UserDetailsImpl principal) {
-        System.out.println("세션 정보: " + principal);
+        System.out.println("Session info: " + principal);
+        if (principal.getUser().getOauth().equals(OAuthType.KAKAO)) {
+            // 카카오 회원인 경우 비밀번호 고정
+            user.setPassword(kakaoPassword);
+        }
+
         principal.setUser(userService.updateUser(user));
         return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 회원 수정 완료");
     }

@@ -2,6 +2,7 @@ package com.example.shoppingweb.service;
 
 import com.example.shoppingweb.domain.RoleType;
 import com.example.shoppingweb.domain.User;
+import com.example.shoppingweb.dto.OAuthType;
 import com.example.shoppingweb.persistance.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -63,6 +64,9 @@ public class UserService {
     public void insertUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(RoleType.USER);
+        if (user.getOauth() == null) {
+            user.setOauth(OAuthType.DEFAULT);
+        }
         userRepository.save(user);
     }
 

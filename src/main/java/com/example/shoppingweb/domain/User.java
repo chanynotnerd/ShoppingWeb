@@ -1,5 +1,6 @@
 package com.example.shoppingweb.domain;
 
+import com.example.shoppingweb.dto.OAuthType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -45,4 +46,7 @@ public class User {
 
     @CreationTimestamp
     private LocalDateTime createDate;
+
+    @Enumerated(EnumType.STRING)
+    private OAuthType oauth;
 }

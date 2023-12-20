@@ -3,6 +3,7 @@ package com.example.shoppingweb.service;
 import com.example.shoppingweb.domain.OAuthToken;
 import com.example.shoppingweb.domain.RoleType;
 import com.example.shoppingweb.domain.User;
+import com.example.shoppingweb.dto.OAuthType;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -135,6 +136,7 @@ public class KakaoLoginService {
         user.setPassword(kakaoPassword);
         user.setEmail(email);
         user.setRole(RoleType.USER);
+        user.setOauth(OAuthType.KAKAO);
         return user;
     }
 }

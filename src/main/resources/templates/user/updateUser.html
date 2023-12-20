@@ -9,14 +9,17 @@
 <div class="container mt-3">
     <form>
         <input id="id" th:value="${#authentication.principal.id}" type="hidden">
+        <p th:text="'OAuth value: ' + ${#authentication.principal.user.oauth}"></p>
         <div class="mb-3">
             <label for="username">Username:</label>
             <input class="form-control" id="username" name="username" placeholder="Enter username"
                    th:value="${#authentication.principal.username}">
         </div>
+        <div th:if="${#strings.equals(#authentication.principal.user.oauth, 'DEFAULT')}">
         <div class="mb-3">
             <label for="password">Password:</label>
             <input class="form-control" id="password" name="password" placeholder="Enter password" type="password">
+        </div>
         </div>
         <div class="mb-3 mt-3">
             <label for="email">Email:</label>
