@@ -9,7 +9,7 @@
 <div class="container mt-3">
     <form>
         <input id="id" th:value="${#authentication.principal.id}" type="hidden">
-        <p th:text="'OAuth value: ' + ${#authentication.principal.user.oauth}"></p>
+        <!--<p th:text="'OAuth value: ' + ${#authentication.principal.user.oauth}"></p>-->
         <div class="mb-3">
             <label for="username">Username:</label>
             <input class="form-control" id="username" name="username" placeholder="Enter username"

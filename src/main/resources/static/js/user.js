@@ -17,14 +17,21 @@ let userObject =
 	},
 
     execDaumPostcode: function() {
+            let _this = this;
             new daum.Postcode({
                 oncomplete: function(data) {
                     document.getElementById('sample6_postcode').value = data.zonecode;
                     document.getElementById('sample6_address').value = data.address;
                     document.getElementById('sample6_detailAddress').value = data.buildingName;
-                    document.getElementById('sample6_extraAddress').value = data.detailAddress;
+                    // 검색창 닫기
+                    _this.closeDaumPostcode();
                 }
             }).open();
+        },
+        closeDaumPostcode: function() {
+            // 팝업창 닫기
+            let element_layer = document.getElementById('postcode-layer');
+            element_layer.style.display = 'none';
         },
 
 	insertUser: function() {
