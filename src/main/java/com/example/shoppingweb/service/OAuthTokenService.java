@@ -26,8 +26,20 @@ public class OAuthTokenService {
             User user = userRepository.findById(oAuthTokenDTO.getUser_Id()).orElseThrow(() -> new RuntimeException("user not found."));
             String encryptedAccessToken = AES.encrypt(oAuthTokenDTO.getAccessToken(), secretKey); // 엑세스토큰 암호화
             String encryptedRefreshToken = AES.encrypt(oAuthTokenDTO.getRefreshToken(), secretKey); // 리프레시토큰 암호화
-            OAuthToken newOAuthToken = new OAuthToken(encryptedAccessToken, encryptedRefreshToken, user);
-            oAuthTokenRepository.save(newOAuthToken);
+            OAuthToken existOAuthToken = oAuthTokenRepository.findByUserId(user.getId());
+            // 유저의 OAuthToken이 존재한다면
+            if (existOAuthToken != null) {
+                // 기존 토큰 값들을 새로운 값으로 set해주고 db에 반영
+                existOAuthToken.setAccessToken(encryptedAccessToken);
+                existOAuthToken.setRefreshToken(encryptedRefreshToken);
+                oAuthTokenRepository.save(existOAuthToken);
+            } else {    // 유저의 OAuthToken이 존재하지 않는다면
+                // 새 토큰 객체를 만들어 db에 저장
+                OAuthToken newOAuthToken = new OAuthToken(encryptedAccessToken, encryptedRefreshToken, user);
+                oAuthTokenRepository.save(newOAuthToken);
+            }
+            /*OAuthToken newOAuthToken = new OAuthToken(encryptedAccessToken, encryptedRefreshToken, user);
+            oAuthTokenRepository.save(newOAuthToken);*/
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OAuthTokenRepository extends JpaRepository<OAuthToken, Integer> {
+    OAuthToken findByUserId(int userId);
 }

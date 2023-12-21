@@ -84,7 +84,7 @@ public class KakaoLoginController {
                 // 문제점: findUser.getId()가 출력이 잘 되고 있는데도 불구하고 null이 반환되고 있음.
                 // 문제점2: 회원가입이 되면서 토큰은 저장하지 않았다.
 
-                System.out.println("findUser in else: " + findUser.getId());
+                System.out.println("findUser when already had sign up: " + findUser.getId());
                 /*Integer tokentableuserid = findUser.getId();
                 OAuthTokenDTO tokenFromTokenTable = oAuthTokenService.getToken(tokentableuserid);*/
                 Integer getTokenUserId = findUser.getId();
@@ -112,11 +112,13 @@ public class KakaoLoginController {
 
                     oAuthTokenService.saveToken(oAuthTokenDTO);
 
-                    // 새로운 사용자 정보로 로그인 처리.
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(kakaoUser.getUsername(), kakaoPassword);
-                    Authentication authentication = authenticationManager.authenticate(authenticationToken);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
+                // 새로운 사용자 정보로 로그인 처리.
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(kakaoUser.getUsername(), kakaoPassword);
+                Authentication authentication = authenticationManager.authenticate(authenticationToken);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                System.out.println("login Successfully");
             }
         } catch (HttpClientErrorException e) {  // HTTP 요청 중 발생하는 예외
             if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
