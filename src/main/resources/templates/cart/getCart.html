@@ -8,6 +8,10 @@
 
 <div class="container mt-4">
     <h2>장바구니</h2>
+    <div th:if="${cart != null}">
+        <div th:text="'총 상품 갯수: ' + ${cart.count} + '개'"></div>
+        <br><br>
+    </div>
     <div th:if="${not #lists.isEmpty(cart.cartItems)}">
         <table class="table">
             <thead>

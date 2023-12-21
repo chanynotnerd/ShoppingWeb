@@ -36,7 +36,7 @@
                 </ul>
             </div>
             <div th:if="${#authentication.name != 'anonymousUser'}">
-                <p th:text="'Logged in as ' + ${#authentication.name}"></p>
+                <!--<p th:text="'Logged in as ' + ${#authentication.name}"></p>-->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li hidden="hidden" th:text="${session.principal}">
                     <li class="nav-item"><a class="nav-link" href="/auth/updateUser">회원상세</a></li>
@@ -59,21 +59,20 @@
                     </li>
                 </ul>
             </div>
-            <div>
-                <a class="nav-item" th:href="@{/cart/user}" style="margin-left: auto;">Cart:</a>
+            <!--<ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <a class="nav-item" th:href="@{/cart/user}" style="margin-left: auto;">Cart</a>
                     
-                <div th:if="${cart != null}">
+                &lt;!&ndash;<div th:if="${cart != null}">
                     <div th:text="${cart.count}"></div>
-                </div>
-                </div>
+                </div>&ndash;&gt;
+            </ul>-->
 
-            <!--<form class="d-flex" th:action="@{/cart/user/{userId}(userId=${userId})}" style="margin-left: auto;">
+            <form class="d-flex" style="margin-left: auto;" th:action="@{/cart/user}">
                 <button class="btn btn-outline-dark">
                     <i class="bi-cart-fill me-1"></i>
                     Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
                 </button>
-            </form>-->
+            </form>
         </div>
     </div>
 </nav>
