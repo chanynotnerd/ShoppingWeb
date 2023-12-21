@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class OAuthToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(nullable = false)
     private String accessToken;
@@ -25,9 +25,6 @@ public class OAuthToken {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Column
-    private Long kakaoId;
 
     public OAuthToken(String accessToken, String refreshToken, User user) {
         this.accessToken = accessToken;

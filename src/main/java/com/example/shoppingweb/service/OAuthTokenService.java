@@ -35,7 +35,7 @@ public class OAuthTokenService {
 
     public OAuthTokenDTO getToken(Integer user_Id) {
         try {
-            OAuthToken oAuthToken = oAuthTokenRepository.findById(user_Id).orElseThrow(() -> new RuntimeException("해당 토큰이 없습니다."));
+            OAuthToken oAuthToken = oAuthTokenRepository.findById(user_Id).orElseThrow(() -> new RuntimeException("token not found."));
             String decryptedAccessToken = AES.decrypt(oAuthToken.getAccessToken(), secretKey); // 복호화
             String decryptedRefreshToken = AES.decrypt(oAuthToken.getRefreshToken(), secretKey); // 복호화
             return new OAuthTokenDTO(decryptedAccessToken, decryptedRefreshToken, user_Id);

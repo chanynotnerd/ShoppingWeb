@@ -6,13 +6,11 @@ import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.dto.OAuthType;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -139,5 +137,41 @@ public class KakaoLoginService {
         user.setRole(RoleType.USER);
         user.setOauth(OAuthType.KAKAO);
         return user;
+    }
+
+    // 엑세스 토큰이 만료되었는지 확인
+    public boolean isAccessTokenValid(String accessToken) {
+        // HttpHeader 생성
+        HttpHeaders header = new HttpHeaders();
+        header.add("Authorization", "Bearer " + accessToken);
+        header.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        // HttpHeader와 HttpBody를 하나의 객체에 담기, header는 생략 가능
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(header);
+
+        // RestTemplate을 이용하면 브라우저 없이 HTTP 요청을 처리할 수 있다.
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            // HTTP 요청을 GET 방식으로 실행 -> 문자열이 응답으로 들어온다.
+            ResponseEntity<String> responseEntity = restTemplate.exchange(
+                    "https://kapi.kakao.com/v1/user/access_token_info",
+                    HttpMethod.GET,
+                    requestEntity,
+                    String.class
+            );
+            return responseEntity.getStatusCode() == HttpStatus.OK;
+        } catch (HttpClientErrorException e) {
+            return false;
+        }
+    }
+
+
+    public User getUserInfoWithValidToken(String accessToken, String refreshToken) {
+        if (!isAccessTokenValid(accessToken)) {
+            OAuthToken newToken = refreshAccessToken(refreshToken);
+            accessToken = newToken.getAccessToken();
+        }
+        return getUserInfo(accessToken);
     }
 }
