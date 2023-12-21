@@ -26,6 +26,9 @@ public class OAuthToken {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column
+    private Long kakaoId;
+
     public OAuthToken(String accessToken, String refreshToken, User user) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

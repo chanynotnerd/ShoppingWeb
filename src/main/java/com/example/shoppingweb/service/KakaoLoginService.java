@@ -132,6 +132,7 @@ public class KakaoLoginService {
                 (String) ((Map<?, ?>) (data.get("kakao_account"))).get("email");
 
         User user = new User();
+        // id는 자동증가값이기 때문에 따로 set해주지 않음.
         user.setUsername(email);
         user.setPassword(kakaoPassword);
         user.setEmail(email);

@@ -23,7 +23,7 @@ public class OAuthTokenService {
 
     public void saveToken(OAuthTokenDTO oAuthTokenDTO) {
         try {
-            User user = userRepository.findById(oAuthTokenDTO.getUser_Id()).orElseThrow(() -> new RuntimeException("해당 유저가 없습니다."));
+            User user = userRepository.findById(oAuthTokenDTO.getUser_Id()).orElseThrow(() -> new RuntimeException("user not found."));
             String encryptedAccessToken = AES.encrypt(oAuthTokenDTO.getAccessToken(), secretKey); // 엑세스토큰 암호화
             String encryptedRefreshToken = AES.encrypt(oAuthTokenDTO.getRefreshToken(), secretKey); // 리프레시토큰 암호화
             OAuthToken newOAuthToken = new OAuthToken(encryptedAccessToken, encryptedRefreshToken, user);

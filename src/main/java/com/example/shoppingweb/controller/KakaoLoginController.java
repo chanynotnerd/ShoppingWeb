@@ -46,9 +46,11 @@ public class KakaoLoginController {
 
             // 엑세스 토큰을 이용하여 사용자 정보 획득
             User kakaoUser = kakaoLoginService.getUserInfo(accessToken);
+            System.out.println(kakaoUser);
 
             // 회원인지 확인하고 해당 내용 없으면 신규 등록
             User findUser = userService.getUser(kakaoUser.getUsername());
+            System.out.println("findUser is: " + findUser);
             if (findUser.getUsername() == null) {
                 userService.insertUser(kakaoUser);
             }
@@ -60,9 +62,12 @@ public class KakaoLoginController {
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println("카카오로 회원가입 완료");
+            System.out.println("login with KakaoOAuth");
 
-            Integer userId = kakaoUser.getId();
+            // String kakaoUsername = findUser.getUsername();
+
+            Integer userId = findUser.getId();
+            System.out.println(userId);
             OAuthTokenDTO oAuthTokenDTO = new OAuthTokenDTO(accessToken, refreshToken, userId);
             oAuthTokenService.saveToken(oAuthTokenDTO);
 
@@ -70,13 +75,14 @@ public class KakaoLoginController {
             if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
                 // 401 에러가 난다면 엑세스 토큰이 만료된 것을 의미한다.
                 // refreshOAuthToken으로 새로운 accessToken을 얻어온다.
-                System.out.println("401에러 호출");
+                System.out.println("401 error incame");
                 OAuthToken refreshOAuthToken = kakaoLoginService.refreshAccessToken(refreshToken);
 
                 // 새로 발급받은 엑세스 토큰으로 사용자 정보 가져오기.
                 User kakaoUser = kakaoLoginService.getUserInfo(refreshOAuthToken.getAccessToken());
+                User findUser = userService.getUser(kakaoUser.getUsername());
 
-                Integer userId = kakaoUser.getId();
+                Integer userId = findUser.getId();
 
                 // 토큰 정보 갱신.
                 OAuthTokenDTO oAuthTokenDTO = oAuthTokenService.getToken(userId); // 복호화된 토큰 정보를 가져옴
