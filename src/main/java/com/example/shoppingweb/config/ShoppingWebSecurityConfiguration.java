@@ -1,5 +1,6 @@
 package com.example.shoppingweb.config;
 
+import com.example.shoppingweb.security.LoginAuthenticationSuccessHandler;
 import com.example.shoppingweb.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ShoppingWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private LoginAuthenticationSuccessHandler loginAuthenticationSuccessHandler;
 
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -43,16 +47,12 @@ public class ShoppingWebSecurityConfiguration extends WebSecurityConfigurerAdapt
         // 이외의 경로는 인증 필요
         http.authorizeRequests().anyRequest().authenticated();
 
-        http.formLogin();
+        http.formLogin().loginPage("/auth/login")   // 사용자 정의 로그인 화면 제공
+                .loginProcessingUrl("/auth/securitylogin")  // 로그인 요청 URI를 변경한다.
+                .successHandler(loginAuthenticationSuccessHandler); // 로그인 성공 핸들러 설정
 
         // CSRF 토큰을 받지 않음
         http.csrf().disable();
-
-        // 사용자 정의 로그인 화면 제공
-        http.formLogin().loginPage("/auth/login");
-
-        // 로그인 요청 URI를 변경한다.
-        http.formLogin().loginProcessingUrl("/auth/securitylogin");
 
         // 로그아웃 설정
         http.logout().logoutUrl("/auth/logout").logoutSuccessUrl("/").invalidateHttpSession(true)

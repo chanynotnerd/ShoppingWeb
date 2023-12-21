@@ -70,6 +70,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
+    public boolean isAdmin(User user) {
+        return user.getRole() == RoleType.ADMIN;
+    }
+
     /*@Transactional
     public User updateUser(User user)
     {
