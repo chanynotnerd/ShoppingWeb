@@ -7,6 +7,8 @@ import com.example.shoppingweb.dto.OAuthType;
 import com.example.shoppingweb.persistance.AuthorityRepository;
 import com.example.shoppingweb.persistance.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,6 +86,17 @@ public class UserService {
         }
         userRepository.save(user);
     }
+
+    @Transactional(readOnly = true)
+    public Page<User> getUserList(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    /*@Transactional(readOnly = true)
+    public Page<User> userSearchList(String searchKeyword, Pageable pageable)
+    {
+        return userRepository.findByUserNameContaining(searchKeyword, pageable);
+    }*/
 
     @Transactional(readOnly = true)
     public boolean isAdmin(User user) {

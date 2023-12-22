@@ -31,4 +31,9 @@ public class ItemService {
     {
         return itemRepository.findAll(pageable);
     }
+
+    @Transactional(readOnly = true)
+    public Page<Item> itemSearchList(String searchKeyword, Pageable pageable) {
+        return itemRepository.findByItemNameContaining(searchKeyword, pageable);
+    }
 }

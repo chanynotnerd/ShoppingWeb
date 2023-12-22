@@ -19,6 +19,32 @@
             <li><a href="/admin/usermanage">상품 정보 변경</a></li>
         </ul>
     </nav>
+    <nav>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>이메일</th>
+                <th>권한</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td id=id th:data-user-identifyId th;text="${user.id}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.role}"></td>
+                <td>
+                    <button class="btn btn-danger" id="btn-update" th:data-user-update-id=${user.id} }>수정하기</button>
+                </td>
+                <td>
+                    <button class="btn btn-danger" id="btn-delete" th:data-user-delete-id=${user.id}>삭제하기</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </nav>
 </section>
 <!-- Include the footer fragment -->
 <div th:replace="fragment/footer :: footer"></div>

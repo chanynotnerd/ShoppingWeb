@@ -53,4 +53,6 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "authority_name", referencedColumnName = "authority_name")
     private Authority authority;
+
+    // private List<User> users = new ArrayList<>();
 }

@@ -1,9 +1,11 @@
 package com.example.shoppingweb.controller;
 
+import com.example.shoppingweb.domain.Item;
 import com.example.shoppingweb.security.UserDetailsImpl;
 import com.example.shoppingweb.service.ItemService;
 import com.example.shoppingweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -23,8 +25,15 @@ public class ItemController {
 
     @GetMapping("/item/category/{category}")
     public String getItemListByCategory(@PathVariable String category, Model model,
-                                        @PageableDefault(size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable)
+                                        @PageableDefault(size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+                                        String searchKeyword)
     {
+        if (searchKeyword != null) {
+            Page<Item> itemList = itemService.getItemList(pageable);
+        } else {
+            Page<Item> itemList = itemService.itemSearchList(searchKeyword, pageable);
+        }
+
         model.addAttribute("itemList", itemService.getItemListByCategory(category.toUpperCase(), pageable));
         model.addAttribute("category", category);   // 카테고리별 페이징을 위함.
         return "index";
