@@ -111,7 +111,7 @@ public class KakaoLoginController {
                     oAuthTokenDTO.setRefreshToken(refreshOAuthToken.getRefreshToken());
 
                     oAuthTokenService.saveToken(oAuthTokenDTO);
-
+                    System.out.println("Login with RefreshToken");
                 }
                 // 새로운 사용자 정보로 로그인 처리.
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(kakaoUser.getUsername(), kakaoPassword);

@@ -41,12 +41,16 @@ public class User {
     @Column(nullable = true)
     private String detailAddress;
 
-    @Enumerated(EnumType.STRING)
-    private RoleType role;
-
     @CreationTimestamp
     private LocalDateTime createDate;
 
     @Enumerated(EnumType.STRING)
     private OAuthType oauth;
+
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "authority_name", referencedColumnName = "authority_name")
+    private Authority authority;
 }

@@ -1,9 +1,11 @@
 package com.example.shoppingweb.security;
 
+import com.example.shoppingweb.domain.Authority;
 import com.example.shoppingweb.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.Collection;
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
     private User user;
+    private Authority authority;
 
     public UserDetailsImpl(User user) {
         this.user = user;
@@ -49,6 +52,16 @@ public class UserDetailsImpl implements UserDetails {
     public String getDetailAddress() {
         return user.getDetailAddress();
     }
+
+    public String getRole() {
+        return "ROLE_" + user.getRole().name();
+    }
+
+    public String getAuthorityFromAuthority() {
+        String authorityName = user.getAuthority().getAuthorityName().name();
+        System.out.println("Autority name: " + authorityName);
+        return "ROLE_" + user.getAuthority().getAuthorityName().name();
+    }
     // 계정이 만료되지 않았는지 반환
     @Override
     public boolean isAccountNonExpired() {
@@ -75,6 +88,15 @@ public class UserDetailsImpl implements UserDetails {
     // 계정이 가지고 있는 권한 목록 저장하여 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<GrantedAuthority> roleList = new ArrayList<>();
+
+        roleList.add(new SimpleGrantedAuthority(getAuthorityFromAuthority()));
+
+        return roleList;
+    }
+
+    /*@Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         // 권한 목록
         Collection<GrantedAuthority> roleList = new ArrayList<>();
 
@@ -85,9 +107,10 @@ public class UserDetailsImpl implements UserDetails {
             @Override
             public String getAuthority() {
                 return "ROLE_" + user.getRole();
+                *//*return "ROLE_" + user.getAuthority().getAuthorityName().name();*//*
             }
         });
 
         return roleList;
-    }
+    }*/
 }

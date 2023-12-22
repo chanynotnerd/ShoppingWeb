@@ -37,10 +37,29 @@
             </div>
             <div th:if="${#authentication.name != 'anonymousUser'}">
                 <!--<p th:text="'Logged in as ' + ${#authentication.name}"></p>-->
+                <!--<p th:text="${authentication.principal.role}"></p>-->
+                <!--<p th:text="${#authentication.principal.authorities}"></p>-->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li hidden="hidden" th:text="${session.principal}">
-                    <li class="nav-item"><a class="nav-link" href="/auth/updateUser">회원상세</a></li>
+                    <!--<li hidden="hidden" th:text="${session.principal}">-->
+                    <!--<div th:if="${#authentication.principal.role == 'ROLE_ADMIN'}">-->
+                    <!--<p th:text="${#authentication.principal.authorities}"></p>-->
+                    <!--<div th:if="${#authentication.principal.authorities.![authority] == 'ROLE_ADMIN'}">-->
+                    <div th:if="${#lists.contains(#authentication.principal.authorities.![authority], 'ROLE_ADMIN')}">
+                        <!--<p th:text="'Logged in as ' + ${#authentication.name}"></p>
+                        <p th:text="${#authentication.principal.authority}"></p>-->
+                        <!--<form class="d-flex" style="margin-left: auto;" th:action="@{/admin}">
+                            <button class="btn btn-outline-dark">
+                                ADMIN PAGE
+                            </button>
+                        </form>-->
+                        <li class="nav-item"><a class="nav-link" href="/admin">관리자 페이지</a></li>
+                    </div>
+                    <li class="nav-item" th:unless="${#authentication.principal.role == 'ROLE_ADMIN'}">
+                        <a class="nav-link" href="/auth/updateUser">회원상세</a></li>
                     <li class="nav-item"><a class="nav-link" aria-current="page" href="/auth/logout">로그아웃</a></li>
+                    <!--<p th:text="'Logged in as ' + ${#authentication.name}"></p>
+                    <p th:text="${#authentication.principal.role}"></p>-->
+                    <!--<p th:text="${#authentication.principal.role}"></p>-->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown_haslogin" href="#" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
@@ -66,7 +85,14 @@
                     <div th:text="${cart.count}"></div>
                 </div>&ndash;&gt;
             </ul>-->
-
+            <!--<input id="id" th:value="${#authentication.name}" type="hidden">
+            <div th:if="${#authentication.name == 'admin'}">
+                <form class="d-flex" style="margin-left: auto;" th:action="@{/admin}">
+                    <button class="btn btn-outline-dark">
+                        ADMIN PAGE
+                    </button>
+                </form>
+            </div>-->
             <form class="d-flex" style="margin-left: auto;" th:action="@{/cart/user}">
                 <button class="btn btn-outline-dark">
                     <i class="bi-cart-fill me-1"></i>
