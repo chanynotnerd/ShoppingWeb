@@ -45,6 +45,7 @@
                     <!--<p th:text="${#authentication.principal.authorities}"></p>-->
                     <!--<div th:if="${#authentication.principal.authorities.![authority] == 'ROLE_ADMIN'}">-->
                     <div th:if="${#lists.contains(#authentication.principal.authorities.![authority], 'ROLE_ADMIN')}">
+                        <!--<#lists.contain은 첫번째 인자로 받은 리스트가 두번째 인자를 포함하고 있는지 확인.>-->
                         <!--<p th:text="'Logged in as ' + ${#authentication.name}"></p>
                         <p th:text="${#authentication.principal.authority}"></p>-->
                         <!--<form class="d-flex" style="margin-left: auto;" th:action="@{/admin}">
