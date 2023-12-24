@@ -23,6 +23,7 @@
         <table class="table">
             <thead>
             <tr>
+                <th>번호</th>
                 <th>이름</th>
                 <th>이메일</th>
                 <th>권한</th>
@@ -32,14 +33,15 @@
             </thead>
             <tbody>
             <tr th:each="user : ${users}">
-                <td id=id th:data-user-identifyId th;text="${user.id}"></td>
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
                 <td th:text="${user.email}"></td>
                 <td th:text="${user.role}"></td>
                 <td>
-                    <button class="btn btn-danger" id="btn-update" th:data-user-update-id=${user.id} }>수정하기</button>
+                    <a class="btn btn-warning" th:href="@{/admin/usermanage/{id}(id=${user.id})}">수정하기</a>
                 </td>
                 <td>
-                    <button class="btn btn-danger" id="btn-delete" th:data-user-delete-id=${user.id}>삭제하기</button>
+                    <button class="btn btn-danger btn-delete" th:data-user-delete-id="${user.id}">삭제하기</button>
                 </td>
             </tr>
             </tbody>
@@ -48,5 +50,6 @@
 </section>
 <!-- Include the footer fragment -->
 <div th:replace="fragment/footer :: footer"></div>
+<script src="/js/user.js"></script>
 </body>
 </html>

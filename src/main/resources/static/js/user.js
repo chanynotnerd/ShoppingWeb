@@ -11,6 +11,9 @@ let userObject =
 		$("#btn-update").on("click", () => {
 			_this.updateUser();
 		});
+		$("#btn-delete").on("click", () => {
+		    _this.deleteUser();
+		});
 		$("#sample6_postcode").on("click", () => {
                     _this.execDaumPostcode();
         });

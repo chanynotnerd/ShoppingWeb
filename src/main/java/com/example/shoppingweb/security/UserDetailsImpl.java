@@ -58,6 +58,19 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public String getAuthorityFromAuthority() {
+        if (user == null) {
+            System.out.println("User is null");
+            return null;
+        }
+        if (user.getAuthority() == null) {
+            System.out.println("User's authority is null");
+            return null;
+        }
+        if (user.getAuthority().getAuthorityName() == null) {
+            System.out.println("User's authority name is null");
+            return null;
+        }
+
         String authorityName = user.getAuthority().getAuthorityName().name();
         System.out.println("Autority name: " + authorityName);
         return "ROLE_" + user.getAuthority().getAuthorityName().name();
