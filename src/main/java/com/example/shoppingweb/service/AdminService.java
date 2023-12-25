@@ -1,5 +1,6 @@
 package com.example.shoppingweb.service;
 
+import com.example.shoppingweb.domain.Authority;
 import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.persistance.AuthorityRepository;
 import com.example.shoppingweb.persistance.UserRepository;
@@ -24,14 +25,24 @@ public class AdminService {
 
     @Transactional
     public User updateUser(User user) {
-        User findUser = userRepository.findById(user.getId()).get();
-        findUser.setUsername(user.getUsername());
-        findUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        findUser.setEmail(user.getEmail());
-        /*Authority authority = authorityRepository.findByAuthorityName(AuthorityName.valueOf(user.getAuthority()));
-        findUser.setAuthority(authority);
-*/
-        return findUser;
+        User findUser = userRepository.findById(user.getId()).orElse(null);
+        if (findUser != null) {
+            findUser.setUsername(user.getUsername());
+            findUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            findUser.setEmail(user.getEmail());
+
+            // 사용자의 권한을 업데이트
+            Authority userAuthority = user.getAuthority();
+            if (userAuthority != null) {
+                Authority existingAuthority = authorityRepository.findByAuthorityName(userAuthority.getAuthorityName());
+                findUser.setAuthority(existingAuthority);
+            }
+            System.out.println("Service incame" + user.getAuthority().getAuthorityName());
+
+            return findUser;
+        } else {
+            throw new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.");
+        }
     }
 
     @Transactional(readOnly = true)

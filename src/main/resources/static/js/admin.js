@@ -14,9 +14,13 @@ let adminObject = {
             username: $("#username").val(),
             password: $("#password").val(),
             email: $("#email").val(),
-            authority: $("#authority").val()
+            authority: {
+                          authorityName: $("#authorityName").val()
+            }
         }
         console.log(user);
+        console.log($("#authorityName").val());
+
         $.ajax({
             type: "PUT",
             url: "/admin/usermanage/" + user.id,

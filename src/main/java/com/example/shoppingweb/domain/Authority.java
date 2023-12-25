@@ -19,4 +19,12 @@ public class Authority {
 
     @Column(length = 50)
     private String title;
+
+    public RoleType getAuthorityName() {
+        return authorityName;
+    }
+
+    public void setAuthorityName(RoleType authorityName) {
+        this.authorityName = authorityName;
+    }
 }

@@ -43,18 +43,29 @@ public class AdminController {
     @PutMapping("/usermanage/{id}")
     public @ResponseBody ResponseDTO<?> updateUser(@RequestBody User user,
                                                    @AuthenticationPrincipal UserDetailsImpl principal) {
+        // System.out.println("Controller incame" + user.getAuthority().getAuthorityName());
+
+
         // 회원 정보 수정 전, 로그인에 성공한 사용자가 카카오 회원인지 확인
         if (principal.getUser().getOauth().equals(OAuthType.KAKAO)) {
             // 카카오 회원일 경우 비밀번호 고정
             user.setPassword(kakaoPassword);
         }
-        Authority authority = new Authority();
-        authority = authorityRepository.save(authority);
-        user.setAuthority(authority);
+
+        Authority authority = user.getAuthority();
+        if (authority != null) {
+            // 기존 Authority 엔티티 가져오기
+            Authority existingAuthority = authorityRepository.findByAuthorityName(authority.getAuthorityName());
+            user.setAuthority(existingAuthority);
+        }
 
         // 회원 정보 수정과 동시에 세션 갱신
-        principal.setUser(adminService.updateUser(user));
-        return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + "수정 완료");
+        try {
+            principal.setUser(adminService.updateUser(user));
+            return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 수정 완료");
+        } catch (IllegalArgumentException e) {
+            return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "유저를 찾을 수 없습니다.");
+        }
     }
 
     @GetMapping("/itemmanage")

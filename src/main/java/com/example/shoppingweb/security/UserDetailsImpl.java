@@ -18,8 +18,10 @@ public class UserDetailsImpl implements UserDetails {
     private User user;
     private Authority authority;
 
-    public UserDetailsImpl(User user) {
+    public UserDetailsImpl(User user, Authority authority) {
         this.user = user;
+        this.authority = authority;
+
     }
 
     public int getId() {
@@ -101,11 +103,16 @@ public class UserDetailsImpl implements UserDetails {
     // 계정이 가지고 있는 권한 목록 저장하여 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> roleList = new ArrayList<>();
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-        roleList.add(new SimpleGrantedAuthority(getAuthorityFromAuthority()));
+        if (user != null) {
+            String userAuthority = getAuthorityFromAuthority();
+            if (userAuthority != null) {
+                authorities.add(new SimpleGrantedAuthority(userAuthority));
+            }
+        }
 
-        return roleList;
+        return authorities;
     }
 
     /*@Override

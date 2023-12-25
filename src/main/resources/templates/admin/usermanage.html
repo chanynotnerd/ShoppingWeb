@@ -14,9 +14,9 @@
     <nav>
         <ul>
             <li><a href="/admin/payment">결제 관리</a></li>
-            <li><a href="/admin/itemmanage">유저 관리</a></li>
+            <li><a href="/admin/itemmanage">상품 정보 변경</a></li>
             <li><a href="/admin/order">주문 관리</a></li>
-            <li><a href="/admin/usermanage">상품 정보 변경</a></li>
+            <li><a href="/admin/usermanage">유저 관리</a></li>
         </ul>
     </nav>
     <nav>
@@ -36,7 +36,7 @@
                 <td th:text="${user.id}"></td>
                 <td th:text="${user.username}"></td>
                 <td th:text="${user.email}"></td>
-                <td th:text="${user.role}"></td>
+                <td th:text="${user.authority.authorityName}"></td>
                 <td>
                     <a class="btn btn-warning" th:href="@{/admin/usermanage/{id}(id=${user.id})}">수정하기</a>
                 </td>
