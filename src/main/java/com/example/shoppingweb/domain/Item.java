@@ -1,7 +1,6 @@
 package com.example.shoppingweb.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +27,10 @@ public class Item {
 
     @Column
     private Integer discountPrice;
+
+    @Lob
+    @Column
+    private String explaination;
 
     @Enumerated(EnumType.STRING)
     private ItemCategory category;

@@ -1,15 +1,20 @@
 package com.example.shoppingweb.controller;
 
 import com.example.shoppingweb.domain.Authority;
+import com.example.shoppingweb.domain.Item;
 import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.dto.OAuthType;
 import com.example.shoppingweb.dto.ResponseDTO;
 import com.example.shoppingweb.persistance.AuthorityRepository;
 import com.example.shoppingweb.security.UserDetailsImpl;
 import com.example.shoppingweb.service.AdminService;
+import com.example.shoppingweb.service.ItemService;
 import com.example.shoppingweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -28,10 +33,14 @@ public class AdminController {
     private AuthorityRepository authorityRepository;
 
     @Autowired
+    private ItemService itemService;
+
+    @Autowired
     private UserService userService;
 
     @Value("${kakao.default.password}")
     private String kakaoPassword;
+
 
     @DeleteMapping("/usermanage/{id}")
     public @ResponseBody ResponseDTO<?> deleteUser(@PathVariable int id, @AuthenticationPrincipal UserDetailsImpl principal) {
@@ -74,8 +83,26 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/itemmanage/{id}")
+    public String updateItem(@PathVariable int id, Model model) {
+        Item item = itemService.getItem(id);
+        model.addAttribute("item", item);
+        return "admin/adminUpdateItem";
+    }
+
+    @PutMapping("/itemmanage/{id}")
+    public @ResponseBody ResponseDTO<?> updateItem(@RequestBody Item item) {
+        adminService.updateItem(item);
+        return new ResponseDTO<>(HttpStatus.OK.value(),
+                item.getId() + "번 포스트를 수정했습니다.");
+    }
+
+
     @GetMapping("/itemmanage")
-    public String getItemManagePage() {
+    public String getItemList(Model model, @PageableDefault(size = 10) Pageable pageable) {
+        Page<Item> itemList = adminService.getItemList(pageable);
+        model.addAttribute("items", itemList);
+
         return "/admin/itemmanage";
     }
 

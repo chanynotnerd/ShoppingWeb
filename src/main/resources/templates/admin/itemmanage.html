@@ -14,10 +14,38 @@
     <nav>
         <ul>
             <li><a href="/admin/payment">결제 관리</a></li>
-            <li><a href="/admin/itemmanage">유저 관리</a></li>
+            <li><a href="/admin/itemmanage">상품 정보 변경</a></li>
             <li><a href="/admin/order">주문 관리</a></li>
-            <li><a href="/admin/usermanage">상품 정보 변경</a></li>
+            <li><a href="/admin/usermanage">유저 관리</a></li>
         </ul>
+    </nav>
+    <nav>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>아이템 이름</th>
+                <th>가격</th>
+                <th>카테고리</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${items}">
+                <td th:text="${item.id}"></td>
+                <td th:text="${item.itemName}"></td>
+                <td th:text="${item.price}"></td>
+                <td th:text="${item.category}"></td>
+                <td>
+                    <a class="btn btn-warning" th:href="@{/admin/itemmanage/{id}(id=${item.id})}">수정하기</a>
+                </td>
+                <td>
+                    <button class="btn btn-danger" th:data-item-delete-id="${item.id}">삭제하기</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </nav>
 </section>
 <!-- Include the footer fragment -->

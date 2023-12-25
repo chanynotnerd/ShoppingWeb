@@ -1,11 +1,16 @@
 package com.example.shoppingweb.service;
 
 import com.example.shoppingweb.domain.Authority;
+import com.example.shoppingweb.domain.Item;
+import com.example.shoppingweb.domain.ItemCategory;
 import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.persistance.AuthorityRepository;
+import com.example.shoppingweb.persistance.ItemRepository;
 import com.example.shoppingweb.persistance.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +24,37 @@ public class AdminService {
     private UserRepository userRepository;
 
     @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
     private AuthorityRepository authorityRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Transactional
+    public void updateItem(Item item) {
+        Item finditem = itemRepository.findById(item.getId()).get();
+
+        item.setItemName(item.getItemName());
+        item.setPrice(item.getPrice());
+        item.setDiscountPercent(item.getDiscountPercent());
+        item.setDiscountPrice(item.getDiscountPrice());
+        item.setCategory(item.getCategory());
+
+        itemRepository.save(item);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Item> getItemList(Pageable pageable) {
+        return itemRepository.findAll(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Item> getItemListByCategory(String category, Pageable pageable) {
+        ItemCategory itemCategory = ItemCategory.valueOf(category.toUpperCase());
+        return itemRepository.findByCategory(itemCategory, pageable);
+    }
 
     @Transactional
     public void deleteUser(int id) {
