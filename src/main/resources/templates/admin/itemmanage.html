@@ -41,7 +41,7 @@
                     <a class="btn btn-warning" th:href="@{/admin/itemmanage/{id}(id=${item.id})}">수정하기</a>
                 </td>
                 <td>
-                    <button class="btn btn-danger" th:data-item-delete-id="${item.id}">삭제하기</button>
+                    <button class="btn btn-danger btn-delete" th:data-item-delete-id="${item.id}">삭제하기</button>
                 </td>
             </tr>
             </tbody>
@@ -50,5 +50,6 @@
 </section>
 <!-- Include the footer fragment -->
 <div th:replace="fragment/footer :: footer"></div>
+<script src="/js/admin.js"></script>
 </body>
 </html>

@@ -18,8 +18,13 @@ let adminObject = {
          });
          $(".btn-delete-item").on("click", function(event) {
             event.preventDefault();
-            let itemId = $(this).data('item-delete-id');
-            _this.deleteItem(itemId);
+            let itemId = $(this).attr('data-item-delete-id');
+                console.log("Item ID: ", itemId); // 이 부분을 추가
+                if(itemId) {
+                    _this.deleteItem(itemId);
+                } else {
+                    console.log("Item ID is undefined."); // itemId가 undefined일 경우 이 메시지가 출력됩니다.
+                }
          });
     },
 
@@ -110,7 +115,7 @@ let adminObject = {
     deleteItem: function(itemId) {
             $.ajax({
                 type: "DELETE",
-                url: "/api/v1/items/" + itemId,
+                url: "/admin/itemmanage/" + itemId,
                 contentType: "application/json; charset=utf-8"
             }).done(function(response) {
                 if (response.ok) {

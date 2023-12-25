@@ -97,6 +97,19 @@ public class AdminController {
                 item.getId() + "번 포스트를 수정했습니다.");
     }
 
+    @DeleteMapping("/itemmanage/{id}")
+    public @ResponseBody ResponseDTO<?> deleteItem(@PathVariable int id) {
+        adminService.deleteItem(id);
+        return new ResponseDTO<>(HttpStatus.OK.value(), id + "번 아이템 삭제.");
+    }
+
+    /*@DeleteMapping("/post/{id}")
+    public @ResponseBody ResponseDTO<?> deletePost(@PathVariable int id)
+    {
+        postService.deletePost(id);
+        return new ResponseDTO<>(HttpStatus.OK.value(),
+                id + "번 포스트를 삭제하였습니다.");
+    }*/
 
     @GetMapping("/itemmanage")
     public String getItemList(Model model, @PageableDefault(size = 10) Pageable pageable) {

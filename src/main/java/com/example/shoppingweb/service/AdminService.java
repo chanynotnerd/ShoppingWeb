@@ -33,6 +33,11 @@ public class AdminService {
     private PasswordEncoder passwordEncoder;
 
     @Transactional
+    public void deleteItem(int id) {
+        itemRepository.deleteById(id);
+    }
+
+    @Transactional
     public void updateItem(Item item) {
         Item finditem = itemRepository.findById(item.getId()).get();
 
@@ -42,7 +47,7 @@ public class AdminService {
         item.setDiscountPrice(item.getDiscountPrice());
         item.setCategory(item.getCategory());
 
-        itemRepository.save(item);
+        itemRepository.save(finditem);
     }
 
     @Transactional(readOnly = true)
