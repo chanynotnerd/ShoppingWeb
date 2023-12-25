@@ -5,6 +5,7 @@ import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.persistance.AuthorityRepository;
 import com.example.shoppingweb.persistance.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,15 @@ public class AdminService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Transactional
+    public void deleteUser(int id) {
+        try {
+            userRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다.");
+        }
+    }
 
     @Transactional
     public User updateUser(User user) {

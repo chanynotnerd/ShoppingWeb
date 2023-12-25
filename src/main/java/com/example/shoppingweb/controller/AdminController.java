@@ -33,6 +33,12 @@ public class AdminController {
     @Value("${kakao.default.password}")
     private String kakaoPassword;
 
+    @DeleteMapping("/usermanage/{id}")
+    public @ResponseBody ResponseDTO<?> deleteUser(@PathVariable int id, @AuthenticationPrincipal UserDetailsImpl principal) {
+        adminService.deleteUser(id);
+        return new ResponseDTO<>(HttpStatus.OK.value(), "사용자 삭제 완료");
+    }
+
     @GetMapping("/usermanage/{id}")
     public String getUser(@PathVariable int id, Model model, @AuthenticationPrincipal UserDetailsImpl principal) {
         User user = adminService.getUserById(id);

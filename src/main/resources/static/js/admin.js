@@ -6,6 +6,12 @@ let adminObject = {
             event.preventDefault();
             _this.updateUser();
         });
+        $(".btn-delete").on("click", function(event) {
+            event.preventDefault();
+            let userId = $(this).data('user-delete-id');
+            _this.deleteUser(userId);
+        });
+
     },
 
     updateUser: function() {
@@ -44,7 +50,19 @@ let adminObject = {
         }).fail(function(error) {
             alert("에러 발생 : " + error);
         });
-    }
+    },
+    deleteUser: function(userId) {
+            $.ajax({
+                type: "DELETE",
+                url: "/admin/usermanage/" + userId,
+                contentType: "application/json; charset=utf-8"
+            }).done(function(response) {
+                alert("유저가 성공적으로 삭제되었습니다.");
+                location.href = "/admin/usermanage";
+            }).fail(function(error) {
+                alert("에러 발생 : " + error);
+            });
+        }
 }
 
 adminObject.init();
