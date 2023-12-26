@@ -24,6 +24,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -108,6 +109,7 @@ public class AdminController {
             principal.setUser(adminService.updateUser(user));
             // 사용자의 권한이 변경되었을 경우 로그아웃 처리.
             if (isAuthorityChanged) {
+                // 이거 쓸라믄 시큐리티 환경설정 클래스에서 Bean 추가하고 써야 한다. 이거 몰라서 헤맸다.
                 securityContextLogoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
                 return new ResponseDTO<>(HttpStatus.OK.value(), "권한 변경 완료. 다시 로그인해주세요.");
             }
@@ -129,6 +131,17 @@ public class AdminController {
         return "/admin/itemmanage";
     }
 
+    @GetMapping("/itemmanage/insert")
+    public String getItemInsert() {
+        return "/admin/adminInsertItem";
+    }
+
+    @PostMapping("/itemmanage/insert")
+    public @ResponseBody ResponseDTO<?> insertItem(@ModelAttribute Item item,
+                                                   @RequestParam("itemImage") MultipartFile file) {
+        adminService.insertItem(item, file);
+        return new ResponseDTO<>(HttpStatus.OK.value(), "아이템 추가 완료.");
+    }
     @GetMapping("/itemmanage/{id}")
     public String updateItem(@PathVariable int id, Model model) {
         Item item = itemService.getItem(id);

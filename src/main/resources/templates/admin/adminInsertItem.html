@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragment/head :: head"></div>
+</head>
+<body>
+<div th:replace="fragment/header :: header"></div>
+<h1>아이템 추가</h1>
+<form enctype="multipart/form-data" id="item-insert-form" method="post">
+    <label for="itemName">아이템 이름:</label><br>
+    <input id="itemName" name="itemName" type="text"><br>
+    <label for="price">가격:</label><br>
+    <input id="price" name="price" oninput="calculateDiscountPrice();" type="text"><br>
+    <label for="discountPercent">할인율:</label><br>
+    <input id="discountPercent" name="discountPercent" oninput="calculateDiscountPrice();" type="text"><br>
+    <label for="discountPrice">할인가격:</label><br>
+    <input id="discountPrice" name="discountPrice" readonly type="text"><br>
+    <label for="explaination">상품설명:</label><br>
+    <input id="explaination" name="explaination" type="text"><br>
+    <label for="itemImage">상품 사진:</label><br>
+    <input id="itemImage" name="itemImage" type="file"><br>
+    <label for="category">카테고리:</label><br>
+    <select id="category" name="category">
+        <option value="CPU">CPU</option>
+        <option value="MOTHERBOARD">MOTHERBOARD</option>
+        <option value="MEMORY">MEMORY</option>
+        <option value="GRAPHIC">GRAPHIC</option>
+        <option value="POWER">POWER</option>
+        <option value="SSD">SSD</option>
+    </select><br>
+    <button class="btn-insert-item" id="btn-insert-item">추가</button>
+</form>
+<div th:replace="fragment/footer :: footer"></div>
+<script>
+    function calculateDiscountPrice() {
+        let price = parseFloat(document.getElementById('price').value);
+        let discountPercent = parseFloat(document.getElementById('discountPercent').value);
+
+        if (price && discountPercent) {
+            let discountPrice = price - (price * (discountPercent / 100));
+            document.getElementById('discountPrice').value = discountPrice;
+        }
+    }
+</script>
+</body>
+<script src="/js/admin.js"></script>
+</html>

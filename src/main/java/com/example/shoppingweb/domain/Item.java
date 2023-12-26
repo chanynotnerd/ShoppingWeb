@@ -34,4 +34,15 @@ public class Item {
 
     @Enumerated(EnumType.STRING)
     private ItemCategory category;
+
+    @Column(name = "image_path")
+    private String imagePath;
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 }

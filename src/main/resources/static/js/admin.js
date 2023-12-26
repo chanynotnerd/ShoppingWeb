@@ -11,6 +11,10 @@ let adminObject = {
             let userId = $(this).data('user-delete-id');
             _this.deleteUser(userId);
         });
+        $("#btn-insert-item").on("click", function(event) {
+            event.preventDefault();
+            _this.insertItem();
+        });
          $(".btn-update-item").on("click", function(event) {
             event.preventDefault();
             let itemId = $(this).data('item-update-id');
@@ -78,6 +82,31 @@ let adminObject = {
                 alert("에러 발생 : " + error);
             });
         },
+
+    insertItem: function() {
+        let formData = new FormData(document.getElementById("item-insert-form"));
+            formData.append('itemName', $("#itemName").val());
+            formData.append('price', $("#price").val());
+            formData.append('discountPercent', $("#discountPercent").val());
+            formData.append('discountPrice', $("#discountPrice").val());
+            formData.append('explaination', $("#explaination").val());
+            formData.append('category', $("#category").val());
+            formData.append('itemImage', $('#itemImage')[0].files[0]); // 이미지 파일 추가
+
+            $.ajax({
+                type: "POST",
+                url: "/admin/itemmanage/insert",
+                data: formData,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data'
+            }).done(function(response) {
+                alert('아이템이 성공적으로 추가되었습니다.');
+                location.href = "/admin/itemmanage";
+            }).fail(function(error) {
+                alert("에러 발생 : " + error);
+            });
+    },
 
     updateItem: function() {
             let item = { // item 객체 선언

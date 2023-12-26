@@ -17,6 +17,8 @@ logging:
 
 # ???? ??
 spring:
+  resources:
+    cache-period: 0
   thymeleaf:
     enabled: true
     prefix: classpath:/templates/
