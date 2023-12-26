@@ -47,6 +47,11 @@ let userObject =
                         address: $("#sample6_address").val(),
                         detailAddress: $("#sample6_detailAddress").val()
 		}
+		if(user.password.trim() === "")
+                {
+                    alert("비밀번호를 입력해주세요.");
+                    return;
+                }
 		$.ajax({
 			type: "POST",
 			url: "/auth/insertUser",
@@ -86,7 +91,11 @@ let userObject =
                                 address: $("#sample6_address").val(),
                                 detailAddress: $("#sample6_detailAddress").val()
         		}
-
+        if(user.password.trim() === "")
+                {
+                    alert("비밀번호를 입력해주세요.");
+                    return;
+                }
 		$.ajax({
 			type: "PUT",
 			url: "/user",

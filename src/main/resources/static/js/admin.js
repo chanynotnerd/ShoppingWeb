@@ -33,6 +33,12 @@ let adminObject = {
                           authorityName: $("#authorityName").val()
             }
         }
+        if(user.password.trim() === "")
+        {
+            alert("비밀번호를 입력해주세요.");
+            return;
+        }
+
         console.log(user);
         console.log($("#authorityName").val());
 
