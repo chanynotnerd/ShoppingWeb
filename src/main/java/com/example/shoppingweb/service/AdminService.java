@@ -41,11 +41,12 @@ public class AdminService {
     public void updateItem(Item item) {
         Item finditem = itemRepository.findById(item.getId()).get();
 
-        item.setItemName(item.getItemName());
-        item.setPrice(item.getPrice());
-        item.setDiscountPercent(item.getDiscountPercent());
-        item.setDiscountPrice(item.getDiscountPrice());
-        item.setCategory(item.getCategory());
+        finditem.setItemName(item.getItemName());
+        finditem.setPrice(item.getPrice());
+        finditem.setDiscountPercent(item.getDiscountPercent());
+        finditem.setDiscountPrice(item.getDiscountPrice());
+        finditem.setExplaination(item.getExplaination());
+        finditem.setCategory(item.getCategory());
 
         itemRepository.save(finditem);
     }

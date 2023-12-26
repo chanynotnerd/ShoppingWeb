@@ -18,13 +18,8 @@ let adminObject = {
          });
          $(".btn-delete-item").on("click", function(event) {
             event.preventDefault();
-            let itemId = $(this).attr('data-item-delete-id');
-                console.log("Item ID: ", itemId); // 이 부분을 추가
-                if(itemId) {
-                    _this.deleteItem(itemId);
-                } else {
-                    console.log("Item ID is undefined."); // itemId가 undefined일 경우 이 메시지가 출력됩니다.
-                }
+            let itemId = $(this).data('item-delete-id');
+            _this.deleteItem(itemId);
          });
     },
 
@@ -118,12 +113,8 @@ let adminObject = {
                 url: "/admin/itemmanage/" + itemId,
                 contentType: "application/json; charset=utf-8"
             }).done(function(response) {
-                if (response.ok) {
-                    alert('아이템이 성공적으로 삭제되었습니다.');
-                    location.href = "/";
-                } else {
-                    alert("에러 발생 : " + response);
-                }
+                 alert('아이템이 성공적으로 삭제되었습니다.');
+                 location.href = "/admin/itemmanage";
             }).fail(function(error) {
                 alert("에러 발생 : " + error);
             });
