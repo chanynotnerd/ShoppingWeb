@@ -21,8 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -121,11 +119,27 @@ public class AdminController {
     }
 
     @GetMapping("/usermanage")
-    public String getUserPage(Model model) {
-        List<User> users = adminService.getAllUsers();
-        model.addAttribute("users", users);
+    public String getUserPage(Model model,
+                              @RequestParam(defaultValue = "0") Integer pageNo,
+                              @RequestParam(defaultValue = "10") Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<User> userList = adminService.getUsers(pageable);
+        // List<User> users = adminService.getAllUsers();
+        model.addAttribute("users", userList);
         return "/admin/usermanage";
     }
+
+    /*@GetMapping("/itemmanage")
+    public String getItemList(
+            Model model,
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Item> itemList = adminService.getItemList(pageable);
+        model.addAttribute("items", itemList);
+
+        return "/admin/itemmanage";
+    }*/
 
     @GetMapping("/payment")
     public String getPaymentPage() {
