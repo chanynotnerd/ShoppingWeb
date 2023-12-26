@@ -19,13 +19,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+    @Autowired
+    private SecurityContextLogoutHandler securityContextLogoutHandler;
+
     @Autowired
     private AdminService adminService;
 
@@ -73,7 +81,8 @@ public class AdminController {
 
     @PutMapping("/usermanage/{id}")
     public @ResponseBody ResponseDTO<?> updateUser(@RequestBody User user,
-                                                   @AuthenticationPrincipal UserDetailsImpl principal) {
+                                                   @AuthenticationPrincipal UserDetailsImpl principal,
+                                                   HttpServletRequest request, HttpServletResponse response) {
         // System.out.println("Controller incame" + user.getAuthority().getAuthorityName());
 
 
@@ -84,15 +93,25 @@ public class AdminController {
         }
 
         Authority authority = user.getAuthority();
+        boolean isAuthorityChanged = false;
         if (authority != null) {
             // 기존 Authority 엔티티 가져오기
             Authority existingAuthority = authorityRepository.findByAuthorityName(authority.getAuthorityName());
+            if (!existingAuthority.equals(principal.getUser().getAuthority())) {
+                isAuthorityChanged = true;
+            }
             user.setAuthority(existingAuthority);
         }
 
         // 회원 정보 수정과 동시에 세션 갱신
         try {
             principal.setUser(adminService.updateUser(user));
+            // 사용자의 권한이 변경되었을 경우 로그아웃 처리.
+            if (isAuthorityChanged) {
+                securityContextLogoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+                return new ResponseDTO<>(HttpStatus.OK.value(), "권한 변경 완료. 다시 로그인해주세요.");
+            }
+
             return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 수정 완료");
         } catch (IllegalArgumentException e) {
             return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "유저를 찾을 수 없습니다.");
