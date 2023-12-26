@@ -46,6 +46,20 @@
             </tr>
             </tbody>
         </table>
+        <nav>
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${items.first ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{/admin/itemmanage(pageNo=${items.number-1})}">이전</a>
+                </li>
+                <li class="page-item" th:classappend="${itemStat == items.number ? 'active' : ''}"
+                    th:each="itemStat : ${#numbers.sequence(0, items.totalPages-1)}">
+                    <a class="page-link" th:href="@{/admin/itemmanage(pageNo=${itemStat})}">[[${itemStat+1}]]</a>
+                </li>
+                <li class="page-item" th:classappend="${items.last ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{/admin/itemmanage(pageNo=${items.number+1})}">다음</a>
+                </li>
+            </ul>
+        </nav>
     </nav>
 </section>
 <!-- Include the footer fragment -->

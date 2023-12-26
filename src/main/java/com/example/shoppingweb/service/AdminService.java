@@ -106,6 +106,9 @@ public class AdminService {
         return findUser;
     }
 
+    public Page<Item> getItems(Pageable pageable) {
+        return itemRepository.findAll(pageable);
+    }
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }

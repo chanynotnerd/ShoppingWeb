@@ -13,8 +13,8 @@ import com.example.shoppingweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -104,7 +104,11 @@ public class AdminController {
     }
 
     @GetMapping("/itemmanage")
-    public String getItemList(Model model, @PageableDefault(size = 10) Pageable pageable) {
+    public String getItemList(
+            Model model,
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Item> itemList = adminService.getItemList(pageable);
         model.addAttribute("items", itemList);
 
