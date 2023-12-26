@@ -6,6 +6,8 @@ import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.dto.OAuthType;
 import com.example.shoppingweb.dto.ResponseDTO;
 import com.example.shoppingweb.persistance.AuthorityRepository;
+import com.example.shoppingweb.persistance.ItemRepository;
+import com.example.shoppingweb.persistance.UserRepository;
 import com.example.shoppingweb.security.UserDetailsImpl;
 import com.example.shoppingweb.service.AdminService;
 import com.example.shoppingweb.service.ItemService;
@@ -36,9 +38,25 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ItemRepository itemRepository;
+
     @Value("${kakao.default.password}")
     private String kakaoPassword;
 
+    @GetMapping("/usermanage/search")
+    public String searchUsers(@RequestParam("name") String searchKeyword, Model model,
+                              @RequestParam(defaultValue = "0") Integer pageNo,
+                              @RequestParam(defaultValue = "10") Integer pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<User> userList = userRepository.findByUsernameContaining(searchKeyword, pageable);
+        model.addAttribute("users", userList);
+        return "/admin/usermanage";
+    }
 
     @DeleteMapping("/usermanage/{id}")
     public @ResponseBody ResponseDTO<?> deleteUser(@PathVariable int id, @AuthenticationPrincipal UserDetailsImpl principal) {
@@ -79,6 +97,17 @@ public class AdminController {
         } catch (IllegalArgumentException e) {
             return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "유저를 찾을 수 없습니다.");
         }
+    }
+
+    @GetMapping("/itemmanage/search")
+    public String searchItems(@RequestParam("name") String searchKeyword, Model model,
+                              @RequestParam(defaultValue = "0") Integer pageNo,
+                              @RequestParam(defaultValue = "10") Integer pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Item> itemList = itemRepository.findByItemNameContaining(searchKeyword, pageable);
+        model.addAttribute("items", itemList);
+        return "/admin/itemmanage";
     }
 
     @GetMapping("/itemmanage/{id}")
@@ -128,18 +157,6 @@ public class AdminController {
         model.addAttribute("users", userList);
         return "/admin/usermanage";
     }
-
-    /*@GetMapping("/itemmanage")
-    public String getItemList(
-            Model model,
-            @RequestParam(defaultValue = "0") Integer pageNo,
-            @RequestParam(defaultValue = "10") Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Item> itemList = adminService.getItemList(pageable);
-        model.addAttribute("items", itemList);
-
-        return "/admin/itemmanage";
-    }*/
 
     @GetMapping("/payment")
     public String getPaymentPage() {

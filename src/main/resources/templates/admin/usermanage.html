@@ -20,6 +20,10 @@
         </ul>
     </nav>
     <nav>
+        <form method="get" th:action="@{/admin/usermanage/search}">
+            <input name="name" placeholder="유저 이름 검색" type="text">
+            <input type="submit" value="검색">
+        </form>
         <table class="table">
             <thead>
             <tr>
