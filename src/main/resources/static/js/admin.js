@@ -85,13 +85,19 @@ let adminObject = {
 
     insertItem: function() {
         let formData = new FormData(document.getElementById("item-insert-form"));
-            formData.append('itemName', $("#itemName").val());
+            /*formData.append('itemName', $("#itemName").val());
             formData.append('price', $("#price").val());
             formData.append('discountPercent', $("#discountPercent").val());
             formData.append('discountPrice', $("#discountPrice").val());
             formData.append('explaination', $("#explaination").val());
             formData.append('category', $("#category").val());
-            formData.append('itemImage', $('#itemImage')[0].files[0]); // 이미지 파일 추가
+            formData.append('itemImage', $('#itemImage')[0].files[0]); // 이미지 파일 추가*/
+            // formdata 자체를 저장하고 append() 함수로 추가 저장하기에 데이터가 중복되는 거였다.
+
+            for (var pair of formData.entries()) {
+                    console.log(pair[0]+ ', ' + pair[1]);
+                }
+
 
             $.ajax({
                 type: "POST",

@@ -62,6 +62,7 @@ public class AdminService {
     public void insertItem(Item item, MultipartFile file) {
         // 먼저 아이템 정보를 저장
         itemRepository.save(item);
+        System.out.println("item insert:" + item);
 
         // 이미지 파일 저장
         if (!file.isEmpty()) {
@@ -69,6 +70,7 @@ public class AdminService {
                 String imagePath = saveImage(file, item.getId());
                 item.setImagePath(imagePath);  // 이미지 경로를 아이템에 설정
                 itemRepository.save(item);     // 이미지 경로가 업데이트된 아이템 저장
+                System.out.println("item insert after saving image:" + item);
             } catch (IOException e) {
                 // 파일 저장 중 오류 처리
             }
