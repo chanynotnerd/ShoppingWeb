@@ -21,9 +21,21 @@
                     <!-- Product details-->
                     <div class="card-body p-4">
                         <div class="text-center">
-                            <!-- Product name, price-->
+                            <!-- Product name-->
                             <h5 class="fw-bolder" th:text="${item.itemName}"></h5>
-                            <td th:text="${#numbers.formatDecimal(item.price, 1, 'COMMA', 0, 'POINT')} + ' 원'"></td>
+                            <!-- price, discount details -->
+                            <div th:if="${item.discountPercent != null}">
+                                <p>정가: <span
+                                        th:text="${#numbers.formatDecimal(item.price, 1, 'COMMA', 0, 'POINT')} + ' 원'"></span>
+                                </p>
+                                <p>할인율: <span th:text="${item.discountPercent} + '%'"></span></p>
+                                <p>할인가격: <span
+                                        th:text="${#numbers.formatDecimal(item.discountPrice, 1, 'COMMA', 0, 'POINT')} + ' 원'"></span>
+                                </p>
+                            </div>
+                            <div th:unless="${item.discountPercent != null}">
+                                <p th:text="${#numbers.formatDecimal(item.price, 1, 'COMMA', 0, 'POINT')} + ' 원'"></p>
+                            </div>
                         </div>
                     </div>
                     <!-- Product buttons-->

@@ -73,7 +73,17 @@ public class CartController {
         // 장바구니 내 수량과 상품의 가격을 적용한 총 금액 출력
         int total = 0;
         for (Cart_item cartItem : cart.getCartItems()) {
-            total += cartItem.getItem().getPrice() * cartItem.getCount();
+            // total += cartItem.getItem().getPrice() * cartItem.getCount();
+            Item item = cartItem.getItem();
+            int price = item.getPrice();
+            if (item.getDiscountPercent() != null) {
+                // 할인율이 적용된 가격 계산
+                int discountPrice = (int) (price - (price * (item.getDiscountPercent() / 100.0)));
+                total += discountPrice * cartItem.getCount();
+            } else {
+                // 할인이 없는 경우 기본 가격 사용
+                total += price * cartItem.getCount();
+            }
         }
         model.addAttribute("total", total); // 총 금액 프론트에 출력
         return "cart/getCart";

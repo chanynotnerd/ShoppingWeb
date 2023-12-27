@@ -18,8 +18,23 @@
             <div class="card-body d-flex flex-column justify-content-center">
                 <!-- Product name, price -->
                 <h5 class="card-title fw-bolder" th:text="${'상품명: ' + item.itemName}"></h5>
-                <p class="card-text" th:text="${'가격: ' + item.price + ' 원'}"></p>
-                <!-- Add to cart button -->
+                <div th:if="${item.discountPercent != null}">
+                    <p>정가: <span th:text="${#numbers.formatDecimal(item.price, 1, 'COMMA', 0, 'POINT')} + ' 원'"></span>
+                    </p>
+                    <p>할인율: <span th:text="${item.discountPercent} + '%'"></span></p>
+                    <p>할인가격: <span
+                            th:text="${#numbers.formatDecimal(item.discountPrice, 1, 'COMMA', 0, 'POINT')} + ' 원'"></span>
+                    </p>
+                </div>
+                <div th:unless="${item.discountPercent != null}">
+                    <p th:text="${#numbers.formatDecimal(item.price, 1, 'COMMA', 0, 'POINT')} + ' 원'"></p>
+                </div>
+                <div th:if="${item.explaination != null}">
+                    <div th:text="${'상품설명: ' + item.explaination}"></div>
+                </div>
+                <div th:unless="${item.explaination != null}">
+                    <p th:text="${'상품설명이 없습니다.'}"></p>
+                </div>
             </div>
         </div>
     </div>
