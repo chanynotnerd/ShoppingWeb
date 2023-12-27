@@ -24,6 +24,7 @@ public class Cart {
 
     private int count;  // 항목에 대한 수(A상품, B상품 총 2개)
 
+    private int total;  // 해당 카트의 총 금액
 
     @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
     private List<Cart_item> cartItems = new ArrayList<>();

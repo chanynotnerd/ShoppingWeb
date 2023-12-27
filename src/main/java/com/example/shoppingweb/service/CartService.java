@@ -58,8 +58,27 @@ public class CartService {
             cart = cart.generateCount(-1, cart);
             cartRepository.saveAndFlush(cart);
         }
+        cart.setTotal(calculateTotal(cart));
         cartRepository.save(cart);
         return cart;
+    }
+
+
+    private int calculateTotal(Cart cart) {
+        int total = 0;
+        for (Cart_item cartItem : cart.getCartItems()) {
+            Item item = cartItem.getItem();
+            int price = item.getPrice();
+            if (item.getDiscountPercent() != null) {
+                // 할인율이 적용된 가격 계산
+                int discountPrice = (int) (price - (price * (item.getDiscountPercent() / 100.0)));
+                total += discountPrice * cartItem.getCount();
+            } else {
+                // 할인이 없는 경우 기본 가격 사용
+                total += price * cartItem.getCount();
+            }
+        }
+        return total;
     }
 
     @Transactional(readOnly = true)

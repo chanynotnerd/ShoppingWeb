@@ -17,7 +17,13 @@ let cartObject =
             let itemId = $(e.target).data('cart-item-id');
             let count = Number($("#count" + itemId).val()); // count 값 확인*/
                 _this.updateCount(e);
-        })
+        });
+        $(document).on('click', '#btn-order', function() {
+            let total = /* HTML에서 total 값 가져오기 */;
+            let orderData = {
+                userId: /* 사용자 ID */,
+                total: total,
+            };
 	},
 
 	addToCart: function() {
