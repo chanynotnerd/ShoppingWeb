@@ -27,7 +27,7 @@
             </thead>
             <tbody>
             <tr th:each="cartItem : ${cart.cartItems}">
-                <td><img th:src="@{'/image/' + ${cartItem.item.id} + '.png'}" alt="Product Image"
+                <td><img alt="Product Image" th:src="@{'/shoppingItem/' + ${cartItem.item.id} + '.png'}"
                          style="height: 100px;"/></td>
                 <td id=itemName th:data-cart-item-idendififyNum="${cartItem.item.id}"
                     th:text="${cartItem.item.id}"></td>

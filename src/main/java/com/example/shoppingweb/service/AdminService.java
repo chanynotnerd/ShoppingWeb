@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 
 @Service
 public class AdminService {
-    private static final String IMAGE_DIRECTORY = "C:/Works/shoppingweb/src/main/resources/static/image/";
+    private static final String IMAGE_DIRECTORY = "C:/Works/shoppingItem/";
 
     @Autowired
     private UserRepository userRepository;

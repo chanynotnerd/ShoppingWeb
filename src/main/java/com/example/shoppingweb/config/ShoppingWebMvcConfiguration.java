@@ -9,6 +9,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -47,6 +48,12 @@ public class ShoppingWebMvcConfiguration implements WebMvcConfigurer {
         registrationBean.setFilter(filter);
         registrationBean.addUrlPatterns("/*");
         return registrationBean;
+    }
+
+    // 외부 파일 시스템에서 사진을 가져오는 부분.
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/shoppingItem/**")
+                .addResourceLocations("file:///C:/Works/shoppingItem/");
     }
 
     @Override
