@@ -64,6 +64,8 @@ public class ShoppingWebSecurityConfiguration extends WebSecurityConfigurerAdapt
         http.logout().logoutUrl("/auth/logout").logoutSuccessUrl("/").invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
 
+        http.headers().frameOptions().sameOrigin();
+
         /*
         // 구글 로그인 설정
         http.oauth2Login().defaultSuccessUrl("/", true);*/
