@@ -54,4 +54,14 @@ public class Cart_item {
     public void setCount(int count) {
         this.count = count;
     }
+
+    @Override
+    public String toString() {
+        return "Cart_item{" +
+                "id=" + id +
+                ", cartId=" + (cart != null ? cart.getId() : null) +
+                ", itemId=" + (item != null ? item.getId() : null) +
+                ", count=" + count +
+                '}';
+    }
 }

@@ -48,7 +48,7 @@ public class ShoppingWebSecurityConfiguration extends WebSecurityConfigurerAdapt
     protected void configure(HttpSecurity http) throws Exception {
         // 인증 없이 접근을 허용하는 경로
         http.authorizeRequests().antMatchers("/webjars/**", "/js/**", "/image/**", "/css/**",
-                "/", "/auth/**", "/item/**", "/oauth/**", "/shoppingItem/**").permitAll();
+                "/", "/auth/**", "/item/**", "/oauth/**", "/shoppingItem/**", "/order/**").permitAll();
 
         // 이외의 경로는 인증 필요
         http.authorizeRequests().anyRequest().authenticated();

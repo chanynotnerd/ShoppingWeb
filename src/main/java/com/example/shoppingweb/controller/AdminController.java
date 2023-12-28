@@ -64,7 +64,7 @@ public class AdminController {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<User> userList = userRepository.findByUsernameContaining(searchKeyword, pageable);
         model.addAttribute("users", userList);
-        return "admin/usermanage";
+        return "th/admin/usermanage";
     }
 
     @DeleteMapping("/usermanage/{id}")
@@ -77,7 +77,7 @@ public class AdminController {
     public String getUser(@PathVariable int id, Model model, @AuthenticationPrincipal UserDetailsImpl principal) {
         User user = adminService.getUserById(id);
         model.addAttribute("user", user);
-        return "admin/adminUpdateUser";
+        return "th/admin/adminUpdateUser";
     }
 
     @PutMapping("/usermanage/{id}")
@@ -128,12 +128,12 @@ public class AdminController {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Item> itemList = itemRepository.findByItemNameContaining(searchKeyword, pageable);
         model.addAttribute("items", itemList);
-        return "admin/itemmanage";
+        return "th/admin/itemmanage";
     }
 
     @GetMapping("/itemmanage/insert")
     public String getItemInsert() {
-        return "thymeleaf/admin/adminInsertItem";
+        return "th/admin/adminInsertItem";
     }
 
     @PostMapping("/itemmanage/insert")
@@ -146,7 +146,7 @@ public class AdminController {
     public String updateItem(@PathVariable int id, Model model) {
         Item item = itemService.getItem(id);
         model.addAttribute("item", item);
-        return "admin/adminUpdateItem";
+        return "th/admin/adminUpdateItem";
     }
 
     @PutMapping("/itemmanage/{id}")
@@ -171,7 +171,7 @@ public class AdminController {
         Page<Item> itemList = adminService.getItemList(pageable);
         model.addAttribute("items", itemList);
 
-        return "admin/itemmanage";
+        return "th/admin/itemmanage";
     }
 
     @GetMapping("/order")

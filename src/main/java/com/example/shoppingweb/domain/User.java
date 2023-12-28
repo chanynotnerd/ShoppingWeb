@@ -54,5 +54,14 @@ public class User {
     @JoinColumn(name = "authority_name", referencedColumnName = "authority_name")
     private Authority authority;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
     // private List<User> users = new ArrayList<>();
 }

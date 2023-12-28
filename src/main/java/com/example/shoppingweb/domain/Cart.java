@@ -47,5 +47,14 @@ public class Cart {
         return cart;
     }
 
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "id=" + id +
+                ", userId=" + (user != null ? user.getId() : null) +
+                ", count=" + count +
+                ", total=" + total +
+                '}';
+    }
 
 }
