@@ -3,17 +3,21 @@ package com.example.shoppingweb.controller;
 import com.example.shoppingweb.domain.OAuthToken;
 import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.dto.OAuthTokenDTO;
+import com.example.shoppingweb.service.ItemService;
 import com.example.shoppingweb.service.KakaoLoginService;
 import com.example.shoppingweb.service.OAuthTokenService;
 import com.example.shoppingweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -26,6 +30,9 @@ public class KakaoLoginController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private ItemService itemService;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -36,7 +43,7 @@ public class KakaoLoginController {
 
 
     @GetMapping("/oauth/kakao")
-    public String KakaoCallback(String code) {
+    public String KakaoCallback(String code, Model model, @PageableDefault(size = 8) Pageable pageable) {
         String refreshToken = null;
 
         try {
@@ -119,6 +126,7 @@ public class KakaoLoginController {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 System.out.println("login Successfully");
+                return "redirect:/";
             }
         } catch (HttpClientErrorException e) {  // HTTP 요청 중 발생하는 예외
             if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
@@ -149,6 +157,7 @@ public class KakaoLoginController {
                 throw e; // 다른 에러는 무시
             }
         }
-        return "redirect:/";
+        // model.addAttribute("itemList", itemService.getItemList(pageable));
+        return "th/index";
     }
 }

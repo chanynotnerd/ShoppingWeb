@@ -64,7 +64,7 @@ public class AdminController {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<User> userList = userRepository.findByUsernameContaining(searchKeyword, pageable);
         model.addAttribute("users", userList);
-        return "/admin/usermanage";
+        return "admin/usermanage";
     }
 
     @DeleteMapping("/usermanage/{id}")
@@ -128,12 +128,12 @@ public class AdminController {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Item> itemList = itemRepository.findByItemNameContaining(searchKeyword, pageable);
         model.addAttribute("items", itemList);
-        return "/admin/itemmanage";
+        return "admin/itemmanage";
     }
 
     @GetMapping("/itemmanage/insert")
     public String getItemInsert() {
-        return "/admin/adminInsertItem";
+        return "thymeleaf/admin/adminInsertItem";
     }
 
     @PostMapping("/itemmanage/insert")
@@ -171,12 +171,12 @@ public class AdminController {
         Page<Item> itemList = adminService.getItemList(pageable);
         model.addAttribute("items", itemList);
 
-        return "/admin/itemmanage";
+        return "admin/itemmanage";
     }
 
     @GetMapping("/order")
     public String getOrderPage() {
-        return "/admin/order";
+        return "th/admin/order";
     }
 
     @GetMapping("/usermanage")
@@ -187,16 +187,16 @@ public class AdminController {
         Page<User> userList = adminService.getUsers(pageable);
         // List<User> users = adminService.getAllUsers();
         model.addAttribute("users", userList);
-        return "/admin/usermanage";
+        return "th/admin/usermanage";
     }
 
     @GetMapping("/payment")
     public String getPaymentPage() {
-        return "/admin/payment";
+        return "th/admin/payment";
     }
 
     @GetMapping({"", "/"})
     public String getAdminMain() {
-        return "/admin/adminIndex";
+        return "th/admin/adminIndex";
     }
 }

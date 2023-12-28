@@ -33,7 +33,7 @@ public class ItemController {
 
         model.addAttribute("itemList", itemService.getItemListByCategory(category.toUpperCase(), pageable));
         model.addAttribute("category", category);   // 카테고리별 페이징을 위함.
-        return "index";
+        return "th/index";
     }
 
     @GetMapping({"", "/"})
@@ -41,7 +41,7 @@ public class ItemController {
             direction = Sort.Direction.ASC)Pageable pageable)
     {
         model.addAttribute("itemList", itemService.getItemList(pageable));
-        return "index";
+        return "th/index";
     }
 
     @GetMapping("/item/{id}")
@@ -49,6 +49,6 @@ public class ItemController {
         model.addAttribute("item", itemService.getItem(id));    // 해당 정보의 상품 프론트 출력
         model.addAttribute("user", principal);    // 사용자 아이디를 프론트에 넘겨줌, 데이터 주고받기 위함
 
-        return "item/getItem";
+        return "th/item/getItem";
     }
 }

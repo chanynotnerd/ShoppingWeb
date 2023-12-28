@@ -17,6 +17,10 @@ logging:
 
 # ???? ??
 spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
   resources:
     cache-period: 0
     chain:
@@ -25,8 +29,10 @@ spring:
     enabled: true
     prefix: classpath:/templates/
     suffix: .html
+    view-names: th/*
     cache: false
     mode: DEBUG
+
 
   datasource:
     password: 1234

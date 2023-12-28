@@ -18,12 +18,16 @@ let cartObject =
             let count = Number($("#count" + itemId).val()); // count 값 확인*/
                 _this.updateCount(e);
         });
-        $(document).on('click', '#btn-order', function() {
-            let total = /* HTML에서 total 값 가져오기 */;
+        /*$(document).on('click', '#btn-order', function() {
+            let total = $('#totalAmount').text();
+            let userId = window.userId;
+
             let orderData = {
-                userId: /* 사용자 ID */,
+                userId: userId,
                 total: total,
             };
+            _this.placeOrder(orderData);
+        };*/
 	},
 
 	addToCart: function() {
@@ -125,6 +129,19 @@ let cartObject =
         					console.log(error);
         				});
 	}
+	/*placeOrder: function(orderData) {
+            $.ajax({
+                type: "POST",
+                url: "/order/place",
+                data: JSON.stringify(orderData),
+                contentType: "application/json; charset=utf-8"
+            }).done(function(response) {
+                location = "/";
+            }).fail(function(error) {
+                alert("에러 발생 : " + error);
+                console.log(error);
+            });
+        }*/
 }
 
 cartObject.init();

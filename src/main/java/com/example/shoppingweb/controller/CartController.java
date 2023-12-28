@@ -54,7 +54,7 @@ public class CartController {
     @GetMapping("/cart/add")
     public String AddCart()
     {
-        return "item/getItem";
+        return "th/item/getItem";
     }
 
 
@@ -86,7 +86,7 @@ public class CartController {
             }
         }
         model.addAttribute("total", total); // 총 금액 프론트에 출력
-        return "cart/getCart";
+        return "th/cart/getCart";
     }
 
     @DeleteMapping("/cart/item")

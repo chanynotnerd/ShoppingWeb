@@ -47,17 +47,17 @@ public class UserController {
 
     @GetMapping("auth/updateUser")
     public String updateUser() {
-        return "user/updateUser";
+        return "th/user/updateUser";
     }
 
     @GetMapping("/auth/login")
     public String login() {
-        return "system/login";
+        return "th/system/login";
     }
 
     @GetMapping("/auth/insertUser")
     public String insertUser() {
-        return "user/insertUser";
+        return "th/user/insertUser";
     }
 
 
