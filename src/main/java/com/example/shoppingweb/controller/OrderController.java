@@ -1,6 +1,7 @@
 package com.example.shoppingweb.controller;
 
 import com.example.shoppingweb.domain.Cart;
+import com.example.shoppingweb.domain.Order;
 import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.security.UserDetailsImpl;
 import com.example.shoppingweb.service.CartService;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -38,7 +40,6 @@ public class OrderController {
         Cart cart = cartService.getCartByUser(user);
         System.out.println("cart: " + cart);
 
-
         if (user == null || user.getUsername() == null) {
             return "redirect:/login";
         }
@@ -60,14 +61,23 @@ public class OrderController {
     }
 
     @PostMapping("/finish")
-    public String getOrderFinish(@AuthenticationPrincipal UserDetailsImpl principal, Model model, HttpServletRequest request) {
+    public String getOrderFinish(@RequestParam("userIdField") int userId, Model model) {
 
+        User user = userService.findUserById(userId);
+
+        if (user == null) {
+            model.addAttribute("errorMessage", "사용자 정보를 찾을 수 없습니다.");
+            return "errorPage";
+        }
+
+        Order order = orderService.createOrder(user);
+        model.addAttribute("order", order);
+        return "PayReturn";
         /*HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         System.out.println("user in orderfinish: " + user);
-        *//*User user = userService.findUserById(principal.getId());*//*
+        User user = userService.findUserById(principal.getId());
         Order order = orderService.createOrder(user);
         model.addAttribute("order", order);*/
-        return "PayReturn";
     }
 }
