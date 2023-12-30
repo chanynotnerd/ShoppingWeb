@@ -118,6 +118,7 @@ public class CartService {
 
         cartItem.setCount(amount);
         cart = cart.generateCount(user.getId(), cart);
+        cart.setTotal(calculateTotal(cart));
         cartItemRepository.save(cartItem);
         return cart;
     }
