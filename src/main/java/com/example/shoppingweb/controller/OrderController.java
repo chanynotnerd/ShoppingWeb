@@ -62,7 +62,7 @@ public class OrderController {
     }
 
     @PostMapping("/finish")
-    public String getOrderFinish(@RequestParam("orderId") Integer orderId, @RequestParam("userId") int userId, Model model) {
+    public String getOrderFinish(@RequestParam("orderId") String orderId, @RequestParam("userId") int userId, Model model) {
 
         User user = userService.findUserById(userId);
 

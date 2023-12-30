@@ -24,6 +24,9 @@ public class Order {
     @JoinColumn(name = "userid")
     private User user;
 
+    @Column
+    private String orderId;
+
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Order_Item> orderItems = new ArrayList<>();
 
