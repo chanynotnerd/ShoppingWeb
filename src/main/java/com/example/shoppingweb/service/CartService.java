@@ -133,6 +133,7 @@ public class CartService {
             }
             cart.getCartItems().clear();
             cart.generateCount(0, cart);
+            cart.setTotal(0);
             cartRepository.save(cart);
         }
     }
