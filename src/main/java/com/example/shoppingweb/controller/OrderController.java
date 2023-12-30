@@ -72,7 +72,14 @@ public class OrderController {
         }
 
         Order order = orderService.createOrder(user, orderId);
-
+        if (order != null) {
+            // 주문 생성 성공 시, 장바구니 비우기
+            cartService.clearCart(user);
+        } else {
+            // 주문 생성 실패 시, 에러 메시지 처리
+            model.addAttribute("errorMessage", "주문 생성에 실패했습니다.");
+            return "errorPage";
+        }
         model.addAttribute("order", order);
         return "PayReturn";
         /*HttpSession session = request.getSession();

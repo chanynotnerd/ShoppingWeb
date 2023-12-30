@@ -123,6 +123,20 @@ public class CartService {
         return cart;
     }
 
+    @Transactional
+    public void clearCart(User user) {
+        Cart cart = cartRepository.findByUserId(user.getId()).orElse(null);
+        if (cart != null) {
+            List<Cart_item> cartItems = new ArrayList<>(cart.getCartItems());
+            for (Cart_item cartItem : cartItems) {
+                cartItemRepository.delete(cartItem);
+            }
+            cart.getCartItems().clear();
+            cart.generateCount(0, cart);
+            cartRepository.save(cart);
+        }
+    }
+
     @Transactional(readOnly = true)
     public Cart getCartByUser(User user) {
         return cartRepository.findByUserId(user.getId()).orElse(null);
