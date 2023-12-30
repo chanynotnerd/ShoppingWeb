@@ -33,6 +33,7 @@ public class OrderController {
     private CartService cartService;
 
     @GetMapping({"", "/"})
+
     public String getOrderPage(@AuthenticationPrincipal UserDetailsImpl principal, Model model, HttpServletRequest request) {
         User user = userService.findUserById(principal.getId());
         System.out.println("username: " + user);
@@ -61,7 +62,7 @@ public class OrderController {
     }
 
     @PostMapping("/finish")
-    public String getOrderFinish(@RequestParam("userIdField") int userId, Model model) {
+    public String getOrderFinish(@RequestParam("orderId") Integer orderId, @RequestParam("userId") int userId, Model model) {
 
         User user = userService.findUserById(userId);
 
@@ -70,7 +71,8 @@ public class OrderController {
             return "errorPage";
         }
 
-        Order order = orderService.createOrder(user);
+        Order order = orderService.createOrder(user, orderId);
+
         model.addAttribute("order", order);
         return "PayReturn";
         /*HttpSession session = request.getSession();

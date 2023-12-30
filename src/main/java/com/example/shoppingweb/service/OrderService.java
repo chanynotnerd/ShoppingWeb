@@ -19,10 +19,11 @@ public class OrderService {
     private CartService cartService;
 
     @Transactional
-    public Order createOrder(User user) {
+    public Order createOrder(User user, int orderId) {
         Cart cart = cartService.getCartByUser(user);
 
         Order order = new Order();
+        order.setId(orderId);
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
         order.setTotalAmount(cart.getTotal());
