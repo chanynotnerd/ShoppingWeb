@@ -62,7 +62,7 @@ public class OrderController {
     }
 
     @PostMapping("/finish")
-    public String getOrderFinish(@RequestParam("orderId") String orderId, @RequestParam("userId") int userId, Model model) {
+    public String getOrderFinish(@RequestParam("orderId") String orderId, @RequestParam("userId") int userId, Model model, HttpServletRequest request) {
 
         User user = userService.findUserById(userId);
 
@@ -71,22 +71,26 @@ public class OrderController {
             return "errorPage";
         }
 
-        Order order = orderService.createOrder(user, orderId);
-        if (order != null) {
-            // 주문 생성 성공 시, 장바구니 비우기
+        /*
+        // 결제시 payreturn에 있는 파라미터 싹 다 가져오기, 분기처리 확인용
+        Enumeration<String> parameterNames = request.getParameterNames();
+        parameterNames.asIterator().forEachRemaining(each -> {
+            System.out.format("%s:%s\n", each, request.getParameter(each));
+        });*/
+
+        String resposeCode = request.getParameter("RESPONSE_CODE");
+
+        // 결제 성공 및 실패 분기처리
+        if (resposeCode.equals("0000")) {
+            // 주문 성공 시, db저장 및 장바구니 비우기
+            Order order = orderService.createOrder(user, orderId);
             cartService.clearCart(user);
+            model.addAttribute("order", order);
+            return "PayReturn";
         } else {
             // 주문 생성 실패 시, 에러 메시지 처리
             model.addAttribute("errorMessage", "주문 생성에 실패했습니다.");
             return "errorPage";
         }
-        model.addAttribute("order", order);
-        return "PayReturn";
-        /*HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        System.out.println("user in orderfinish: " + user);
-        User user = userService.findUserById(principal.getId());
-        Order order = orderService.createOrder(user);
-        model.addAttribute("order", order);*/
     }
 }

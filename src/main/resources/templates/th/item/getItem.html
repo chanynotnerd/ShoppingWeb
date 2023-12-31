@@ -46,8 +46,13 @@
 </div>
 <br><br>
 <script th:inline="javascript">
-    window.itemId = [[${item.id}]];
-    window.userId = [[${user.id}]];
+    const item = [[${item}]];
+    const user = [[${user}]];
+
+    if (item && item.id) window.itemId = item.id
+    if (user && item.id) window.userId = user.id
+
+
 </script>
 <script src="/js/cart.js"></script>
 <div th:replace="fragment/footer :: footer"></div>
