@@ -64,7 +64,7 @@ public class KakaoLoginController {
             if (findUser.getUsername() == null) {
                 userService.insertUser(kakaoUser);
                 System.out.println("InsertUser CameOut");
-                System.out.println("kakaoUser after InsertUser.id is" + kakaoUser.getId());
+                System.out.println("kakaoUser after InsertUser id is" + kakaoUser.getId());
 
                 User findUserAfterInsertUser = userService.getUser(kakaoUser.getUsername());
                 System.out.println(findUserAfterInsertUser);
@@ -88,8 +88,6 @@ public class KakaoLoginController {
 
             } else {
                 // 기존 유저이면 사용자 정보로 토큰 정보 가져오기.
-                // 문제점: findUser.getId()가 출력이 잘 되고 있는데도 불구하고 null이 반환되고 있음.
-                // 문제점2: 회원가입이 되면서 토큰은 저장하지 않았다.
 
                 System.out.println("findUser when already had sign up: " + findUser.getId());
                 /*Integer tokentableuserid = findUser.getId();
@@ -125,7 +123,7 @@ public class KakaoLoginController {
                 Authentication authentication = authenticationManager.authenticate(authenticationToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                System.out.println("login Successfully");
+                System.out.println("login Successful");
                 return "redirect:/";
             }
         } catch (HttpClientErrorException e) {  // HTTP 요청 중 발생하는 예외
