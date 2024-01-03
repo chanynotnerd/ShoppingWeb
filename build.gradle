@@ -43,9 +43,7 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-taglibs'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
 	implementation 'com.google.code.gson:gson:2.8.9'
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws-messaging'
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws-parameter-store-config'
+/*	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'*/
 	compileOnly 'org.projectlombok:lombok:1.18.20'
 	annotationProcessor 'org.projectlombok:lombok:1.18.20'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

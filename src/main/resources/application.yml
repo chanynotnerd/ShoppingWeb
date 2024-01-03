@@ -15,8 +15,6 @@ logging:
             security: INFO
         security: DEBUG
 
-# 여기에 aws가 들어가야하나?
-
 # ???? ??
 spring:
   mvc:
@@ -34,7 +32,6 @@ spring:
     view-names: th/*
     cache: false
     mode: DEBUG
-
 
   datasource:
     password: 1234
