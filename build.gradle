@@ -43,6 +43,13 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-taglibs'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
 	implementation 'com.google.code.gson:gson:2.8.9'
+
+	// JWT 관련 의존성
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
+
+	runtimeOnly 'io.jsonwebtoken:jjwt-orgjson:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2' // Jackson을 사용한 JWT 처리를 위한 의존성
 /*	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'*/
 	compileOnly 'org.projectlombok:lombok:1.18.20'
 	annotationProcessor 'org.projectlombok:lombok:1.18.20'
