@@ -17,6 +17,14 @@ let userObject =
 		$("#sample6_postcode").on("click", () => {
                     _this.execDaumPostcode();
         });
+		$("#btn-login").on("click", function (e) {
+			e.preventDefault(); // 폼의 기본 제출 동작을 방지
+
+			var username = $("#username").val();
+			var password = $("#password").val();
+
+			userObject.login(username, password); // 로그인 함수 호출
+		});
 	},
 
     execDaumPostcode: function() {
@@ -36,6 +44,25 @@ let userObject =
             let element_layer = document.getElementById('postcode-layer');
             element_layer.style.display = 'none';
         },
+
+	login: function (username, password) {
+		$.ajax({
+			url: '/auth/login',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({username: username, password: password}),
+			success: function (response) {
+				// JWT 토큰을 로컬 스토리지에 저장하고 리다이렉트
+				localStorage.setItem('jwtToken', response.token);
+				window.location.href = '/'; // 메인 페이지나 대시보드 등으로 리다이렉트
+			},
+			error: function (xhr, status, error) {
+				// 로그인 실패 시 오류 처리
+				var errorMessage = xhr.status + ": " + (xhr.responseText || "로그인 실패");
+				alert(errorMessage);
+			}
+		});
+	},
 
 	insertUser: function() {
 		alert("회원가입 요청됨");

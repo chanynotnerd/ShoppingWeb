@@ -4,11 +4,16 @@ import com.example.shoppingweb.domain.Authority;
 import com.example.shoppingweb.domain.RoleType;
 import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.dto.OAuthType;
+import com.example.shoppingweb.dto.UserDTO;
+import com.example.shoppingweb.dto.UserResponseDTO;
 import com.example.shoppingweb.persistance.AuthorityRepository;
 import com.example.shoppingweb.persistance.UserRepository;
+import com.example.shoppingweb.token.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +30,28 @@ public class UserService {
 
     @Autowired
     private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Transactional(readOnly = true)
+    public UserResponseDTO login(UserDTO userDTO) {
+        User user = userRepository.findByUsername(userDTO.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+
+        if (!passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+        }
+
+        String token = jwtTokenProvider.createToken(user);
+
+        return UserResponseDTO.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .authority(user.getAuthority())
+                .token(token)
+                .build();
+    }
 
     @Transactional
     public User updateUser(User user) {

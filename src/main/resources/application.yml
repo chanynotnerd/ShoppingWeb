@@ -54,8 +54,8 @@ kakao:
     password: kakao123
 
 # JWT Secret Key 설정
-security:
-  jwt:
-    secret: x!A%D*G-KaPdSgVkYp3s5v8y/B?E(H+M
+jwt:
+  secret:
+    key: x!A%D*G-KaPdSgVkYp3s5v8y/B?E(H+M
 
 Secret_Key: 01020441850

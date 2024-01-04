@@ -2,6 +2,8 @@ package com.example.shoppingweb.config;
 
 import com.example.shoppingweb.security.LoginAuthenticationSuccessHandler;
 import com.example.shoppingweb.security.UserDetailsServiceImpl;
+import com.example.shoppingweb.token.JwtAuthenticationFilter;
+import com.example.shoppingweb.token.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,13 +12,18 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 @Configuration
 @EnableWebSecurity
 public class ShoppingWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
@@ -64,10 +71,16 @@ public class ShoppingWebSecurityConfiguration extends WebSecurityConfigurerAdapt
         http.logout().logoutUrl("/auth/logout").logoutSuccessUrl("/").invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
 
+        /*        http.headers().frameOptions().sameOrigin();*/
+        // JWT 필터 추가
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+        // 세션 정책 변경 : 세션 사용 안함
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // 헤더 설정 유지
         http.headers().frameOptions().sameOrigin();
-
         /*
         // 구글 로그인 설정
         http.oauth2Login().defaultSuccessUrl("/", true);*/
     }
 }
+

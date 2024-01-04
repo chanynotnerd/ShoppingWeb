@@ -4,13 +4,17 @@ import com.example.shoppingweb.domain.User;
 import com.example.shoppingweb.dto.OAuthType;
 import com.example.shoppingweb.dto.ResponseDTO;
 import com.example.shoppingweb.dto.UserDTO;
+import com.example.shoppingweb.dto.UserResponseDTO;
 import com.example.shoppingweb.security.UserDetailsImpl;
 import com.example.shoppingweb.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -44,6 +48,15 @@ public class UserController {
         return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 회원 수정 완료");
     }
 
+    @PostMapping("/auth/login")
+    public ResponseEntity<UserResponseDTO> login(@RequestBody UserDTO userDTO) {
+        try {
+            UserResponseDTO response = userService.login(userDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (UsernameNotFoundException | BadCredentialsException e) {
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
 
     @GetMapping("auth/updateUser")
     public String updateUser() {
