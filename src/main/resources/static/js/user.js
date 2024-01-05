@@ -46,23 +46,71 @@ let userObject =
         },
 
 	login: function (username, password) {
+		let _this = this;
 		$.ajax({
 			url: '/auth/login',
 			type: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify({username: username, password: password}),
 			success: function (response) {
-				// JWT 토큰을 로컬 스토리지에 저장하고 리다이렉트
 				localStorage.setItem('jwtToken', response.token);
-				window.location.href = '/'; // 메인 페이지나 대시보드 등으로 리다이렉트
+				_this.checkAuthStatusAndUpdateMenu(); // 메뉴 상태 업데이트
+				/*location = "/";*/
 			},
-			error: function (xhr, status, error) {
-				// 로그인 실패 시 오류 처리
-				var errorMessage = xhr.status + ": " + (xhr.responseText || "로그인 실패");
+			error: function (xhr) {
+				let errorMessage = xhr.status + ": " + (xhr.responseText || "로그인 실패");
 				alert(errorMessage);
 			}
 		});
 	},
+
+	// 로그아웃 함수
+	logout: function () {
+		localStorage.removeItem('jwtToken');
+		this.checkAuthStatusAndUpdateMenu();
+		window.location.href = '/auth/login'; // 로그인 페이지로 리다이렉트
+	},
+
+	// 인증 상태 확인 및 메뉴 업데이트 함수
+	checkAuthStatusAndUpdateMenu: function () {
+		let token = localStorage.getItem('jwtToken');
+		if (token) {
+			try {
+				let payload = JSON.parse(atob(token.split('.')[1]));
+				let isAdmin = payload.authority.includes('ADMIN');
+				this.updateMenu(true, isAdmin);
+			} catch (e) {
+				console.error('Error decoding token', e);
+				this.updateMenu(false, false);
+			}
+		} else {
+			this.updateMenu(false, false);
+		}
+	},
+
+	// 메뉴 업데이트 함수
+	updateMenu: function (isLoggedIn, isAdmin) {
+		// 로그인 관련 UI를 숨기거나 보여줄 요소들
+		let loginUI = $("#non-authenticated-ui");
+		let logoutUI = $("#authenticated-ui");
+		let adminUI = $("#admin-ui");
+
+		if (isLoggedIn) {
+			loginUI.hide(); // 로그인 메뉴 숨기기
+			logoutUI.show(); // 로그아웃 메뉴 보이기
+
+			if (isAdmin) {
+				adminUI.show(); // 관리자 메뉴 보이기
+			} else {
+				adminUI.hide(); // 관리자 메뉴 숨기기
+			}
+		} else {
+			logoutUI.hide(); // 로그아웃 메뉴 숨기기
+			loginUI.show(); // 로그인 메뉴 보이기
+			adminUI.hide(); // 관리자 메뉴 숨기기
+		}
+	},
+
 
 	insertUser: function() {
 		alert("회원가입 요청됨");

@@ -13,7 +13,7 @@
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div th:if="${#authentication.name == 'anonymousUser'}">
+            <div id="non-authenticated-ui">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li class="nav-item"><a class="nav-link" href="/auth/login">로그인</a></li>
                     <li class="nav-item"><a class="nav-link" aria-current="page" href="/auth/insertUser">회원가입</a></li>
@@ -35,16 +35,17 @@
                     </li>
                 </ul>
             </div>
-            <div th:if="${#authentication.name != 'anonymousUser'}">
+            <div id="authenticated-ui" style="display: none;">
                 <!--<p th:text="'Logged in as ' + ${#authentication.name}"></p>-->
                 <!--<p th:text="${authentication.principal.role}"></p>-->
                 <!--<p th:text="${#authentication.principal.authorities}"></p>-->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link" href="/auth/updateUser">회원상세</a></li>
+                    <li class="nav-item"><a aria-current="page" class="nav-link" href="#" id="btn-logout">로그아웃</a></li>
                     <!--<li hidden="hidden" th:text="${session.principal}">-->
                     <!--<div th:if="${#authentication.principal.role == 'ROLE_ADMIN'}">-->
                     <!--<p th:text="${#authentication.principal.authorities}"></p>-->
                     <!--<div th:if="${#authentication.principal.authorities.![authority] == 'ROLE_ADMIN'}">-->
-                    <div th:if="${#lists.contains(#authentication.principal.authorities.![authority], 'ROLE_ADMIN')}">
                         <!--<#lists.contain은 첫번째 인자로 받은 리스트가 두번째 인자를 포함하고 있는지 확인.>-->
                         <!--<p th:text="'Logged in as ' + ${#authentication.name}"></p>
                         <p th:text="${#authentication.principal.authority}"></p>-->
@@ -53,12 +54,12 @@
                                 ADMIN PAGE
                             </button>
                         </form>-->
+                    <div id="admin-ui" style="display: none;">
                         <li class="nav-item"><a class="nav-link" href="/admin">관리자 페이지</a></li>
+                        <!-- 관리자 메뉴 아이템 -->
                     </div>
-                    <li class="nav-item"
-                        th:unless="${#lists.contains(#authentication.principal.authorities.![authority], 'ROLE_ADMIN')}">
-                        <a class="nav-link" href="/auth/updateUser">회원상세</a></li>
-                    <li class="nav-item"><a class="nav-link" aria-current="page" href="/auth/logout">로그아웃</a></li>
+                </ul>
+                    </div>
                     <!--<p th:text="'Logged in as ' + ${#authentication.name}"></p>
                     <p th:text="${#authentication.principal.role}"></p>-->
                     <!--<p th:text="${#authentication.principal.role}"></p>-->

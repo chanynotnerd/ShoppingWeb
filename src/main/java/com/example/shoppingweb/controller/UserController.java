@@ -16,10 +16,13 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,10 +52,18 @@ public class UserController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<UserResponseDTO> login(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserResponseDTO> login(@RequestBody UserDTO userDTO, HttpServletResponse response,
+                                                 Model model) {
         try {
-            UserResponseDTO response = userService.login(userDTO);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            UserResponseDTO userResponseDTO = userService.login(userDTO);
+
+            // JWT 토큰을 쿠키에 저장
+            Cookie cookie = new Cookie("JWT", userResponseDTO.getToken());
+            cookie.setHttpOnly(true); // JavaScript를 통한 접근 방지
+            cookie.setPath("/"); // 쿠키의 유효 경로 설정
+            response.addCookie(cookie);
+
+            return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
         } catch (UsernameNotFoundException | BadCredentialsException e) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
