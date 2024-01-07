@@ -74,7 +74,7 @@ public class UserDetailsImpl implements UserDetails {
         }
 
         String authorityName = user.getAuthority().getAuthorityName().name();
-        System.out.println("Autority name: " + authorityName);
+        System.out.println("Authority name: " + authorityName);
         return "ROLE_" + user.getAuthority().getAuthorityName().name();
     }
     // 계정이 만료되지 않았는지 반환

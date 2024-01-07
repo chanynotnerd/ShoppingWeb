@@ -68,8 +68,7 @@ public class ShoppingWebSecurityConfiguration extends WebSecurityConfigurerAdapt
         http.csrf().disable();
 
         // 로그아웃 설정
-        http.logout().logoutUrl("/auth/logout").logoutSuccessUrl("/").invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID");
+        http.logout().logoutUrl("/auth/logout").logoutSuccessUrl("/").deleteCookies("Authorization");
 
         /*        http.headers().frameOptions().sameOrigin();*/
         // JWT 필터 추가

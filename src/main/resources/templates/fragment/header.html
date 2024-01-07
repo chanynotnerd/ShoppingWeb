@@ -5,6 +5,7 @@
     <sec:authentication var="principal" property="principal" />
 </div>-->
 <body th:fragment="header">
+<script src="/js/user.js"></script>
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-4 px-lg-5">
@@ -41,67 +42,71 @@
                 <!--<p th:text="${#authentication.principal.authorities}"></p>-->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li class="nav-item"><a class="nav-link" href="/auth/updateUser">회원상세</a></li>
-                    <li class="nav-item"><a aria-current="page" class="nav-link" href="#" id="btn-logout">로그아웃</a></li>
+                    <li class="nav-item"><a aria-current="page" class="nav-link" id="btn-logout">로그아웃</a></li>
                     <!--<li hidden="hidden" th:text="${session.principal}">-->
                     <!--<div th:if="${#authentication.principal.role == 'ROLE_ADMIN'}">-->
                     <!--<p th:text="${#authentication.principal.authorities}"></p>-->
                     <!--<div th:if="${#authentication.principal.authorities.![authority] == 'ROLE_ADMIN'}">-->
-                        <!--<#lists.contain은 첫번째 인자로 받은 리스트가 두번째 인자를 포함하고 있는지 확인.>-->
-                        <!--<p th:text="'Logged in as ' + ${#authentication.name}"></p>
-                        <p th:text="${#authentication.principal.authority}"></p>-->
-                        <!--<form class="d-flex" style="margin-left: auto;" th:action="@{/admin}">
-                            <button class="btn btn-outline-dark">
-                                ADMIN PAGE
-                            </button>
-                        </form>-->
+                    <!--<#lists.contain은 첫번째 인자로 받은 리스트가 두번째 인자를 포함하고 있는지 확인.>-->
+                    <!--<p th:text="'Logged in as ' + ${#authentication.name}"></p>
+                    <p th:text="${#authentication.principal.authority}"></p>-->
+                    <!--<form class="d-flex" style="margin-left: auto;" th:action="@{/admin}">
+                        <button class="btn btn-outline-dark">
+                            ADMIN PAGE
+                        </button>
+                    </form>-->
                     <div id="admin-ui" style="display: none;">
                         <li class="nav-item"><a class="nav-link" href="/admin">관리자 페이지</a></li>
                         <!-- 관리자 메뉴 아이템 -->
                     </div>
                 </ul>
-                    </div>
-                    <!--<p th:text="'Logged in as ' + ${#authentication.name}"></p>
-                    <p th:text="${#authentication.principal.role}"></p>-->
-                    <!--<p th:text="${#authentication.principal.role}"></p>-->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown_haslogin" href="#" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/">All Products</a></li>
-                            <li>
-                                <hr class="dropdown-divider"/>
-                            </li>
-                            <li><a class="dropdown-item" th:href="@{/item/category/CPU}">CPU</a></li>
-                            <li><a class="dropdown-item" th:href="@{/item/category/MOTHERBOARD}">MOTHERBOARD</a></li>
-                            <li><a class="dropdown-item" th:href="@{/item/category/MEMORY}">MEMORY</a></li>
-                            <li><a class="dropdown-item" th:href="@{/item/category/GRAPHIC}">GRAPHIC</a></li>
-                            <li><a class="dropdown-item" th:href="@{/item/category/SSD}">SSD</a></li>
-                            <li><a class="dropdown-item" th:href="@{/item/category/POWER}">POWER</a></li>
-                        </ul>
-                    </li>
-                </ul>
             </div>
-            <!--<ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                <a class="nav-item" th:href="@{/cart/user}" style="margin-left: auto;">Cart</a>
-                    
-                &lt;!&ndash;<div th:if="${cart != null}">
-                    <div th:text="${cart.count}"></div>
-                </div>&ndash;&gt;
-            </ul>-->
-            <!--<input id="id" th:value="${#authentication.name}" type="hidden">
-            <div th:if="${#authentication.name == 'admin'}">
-                <form class="d-flex" style="margin-left: auto;" th:action="@{/admin}">
-                    <button class="btn btn-outline-dark">
-                        ADMIN PAGE
-                    </button>
-                </form>
-            </div>-->
-            <form class="d-flex" style="margin-left: auto;" th:action="@{/cart/user}">
+            <!--<p th:text="'Logged in as ' + ${#authentication.name}"></p>
+            <p th:text="${#authentication.principal.role}"></p>-->
+            <!--<p th:text="${#authentication.principal.role}"></p>-->
+            <li class="nav-item dropdown">
+                <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                   id="navbarDropdown_haslogin" role="button">Shop</a>
+                <ul aria-labelledby="navbarDropdown" class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/">All Products</a></li>
+                    <li>
+                        <hr class="dropdown-divider"/>
+                    </li>
+                    <li><a class="dropdown-item" th:href="@{/item/category/CPU}">CPU</a></li>
+                    <li><a class="dropdown-item" th:href="@{/item/category/MOTHERBOARD}">MOTHERBOARD</a></li>
+                    <li><a class="dropdown-item" th:href="@{/item/category/MEMORY}">MEMORY</a></li>
+                    <li><a class="dropdown-item" th:href="@{/item/category/GRAPHIC}">GRAPHIC</a></li>
+                    <li><a class="dropdown-item" th:href="@{/item/category/SSD}">SSD</a></li>
+                    <li><a class="dropdown-item" th:href="@{/item/category/POWER}">POWER</a></li>
+                </ul>
+            </li>
+            </ul>
+        </div>
+        <!--<ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+            <a class="nav-item" th:href="@{/cart/user}" style="margin-left: auto;">Cart</a>
+
+            &lt;!&ndash;<div th:if="${cart != null}">
+                <div th:text="${cart.count}"></div>
+            </div>&ndash;&gt;
+        </ul>-->
+        <!--<input id="id" th:value="${#authentication.name}" type="hidden">
+        <div th:if="${#authentication.name == 'admin'}">
+            <form class="d-flex" style="margin-left: auto;" th:action="@{/admin}">
                 <button class="btn btn-outline-dark">
-                    <i class="bi-cart-fill me-1"></i>
-                    Cart
+                    ADMIN PAGE
                 </button>
             </form>
-        </div>
+        </div>-->
+        <form class="d-flex" style="margin-left: auto;" th:action="@{/cart/user}">
+            <button class="btn btn-outline-dark">
+                <i class="bi-cart-fill me-1"></i>
+                Cart
+            </button>
+        </form>
     </div>
 </nav>
+<script>
+    $(document).ready(function () {
+        userObject.checkAuthStatusAndUpdateMenu();
+    })
+</script>

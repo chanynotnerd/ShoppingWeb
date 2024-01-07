@@ -22,8 +22,7 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
-    // 만료시간 : 1Hour
-    private final long exp = 1000L * 60 * 60;   // 만료시간: 한 시간
+    private final long exp = 1000L * 5;   // 만료시간: 5초
     private SecretKey secretKey;
     @Value("${jwt.secret.key}")
     private String chanySecretKey;

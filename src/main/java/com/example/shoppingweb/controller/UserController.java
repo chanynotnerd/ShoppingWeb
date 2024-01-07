@@ -58,15 +58,28 @@ public class UserController {
             UserResponseDTO userResponseDTO = userService.login(userDTO);
 
             // JWT 토큰을 쿠키에 저장
-            Cookie cookie = new Cookie("JWT", userResponseDTO.getToken());
+            Cookie cookie = new Cookie("Authorization", userResponseDTO.getToken());
             cookie.setHttpOnly(true); // JavaScript를 통한 접근 방지
             cookie.setPath("/"); // 쿠키의 유효 경로 설정
             response.addCookie(cookie);
+            System.out.println("Login successful: " + userResponseDTO.getToken()); // 추가된 로그
 
             return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
         } catch (UsernameNotFoundException | BadCredentialsException e) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @PostMapping("/auth/logout")
+    public String logout(HttpServletResponse response) {
+        // JWT 토큰을 쿠키에 저장
+        Cookie cookie = new Cookie("Authorization", null);
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true); // JavaScript를 통한 접근 방지
+        cookie.setPath("/"); // 쿠키의 유효 경로 설정
+        response.addCookie(cookie);
+
+        return "redirect:/";
     }
 
     @GetMapping("auth/updateUser")
