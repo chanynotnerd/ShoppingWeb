@@ -15,5 +15,5 @@ public class UserResponseDTO {
     private String email;
     private Authority authority;
     private String token;
-
+    private String refreshToken;
 }

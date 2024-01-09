@@ -64,9 +64,13 @@ let userObject =
                 contentType: 'application/json',
                 data: JSON.stringify({username: username, password: password}),
                 success: function (response) {
+                    console.log("response: ", response);
                     /*localStorage.setItem('jwtToken', response.token);*/
                     localStorage.setItem('username', response.username);
                     localStorage.setItem('email', response.email);
+                    localStorage.setItem('accessToken', response.token);
+                    localStorage.setItem('refreshToken', response.refreshToken);
+                    /*localStorage.setItem('authority', response.authority);*/
 
                     _this.checkAuthStatusAndUpdateMenu(); // 메뉴 상태 업데이트
                     location = "/";
@@ -82,6 +86,9 @@ let userObject =
         logout: function () {
             localStorage.removeItem('username');
             localStorage.removeItem('email');
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            /*localStorage.removeItem('authority');*/
             this.checkAuthStatusAndUpdateMenu();
             window.location.href = '/auth/logout';
         },
@@ -109,10 +116,12 @@ let userObject =
             let loginUI = $("#non-authenticated-ui");
             let logoutUI = $("#authenticated-ui");
             let adminUI = $("#admin-ui");
+            let dropdownUI = $("#dropdown-ui");
 
             if (isLoggedIn) {
                 loginUI.hide(); // 로그인 메뉴 숨기기
                 logoutUI.show(); // 로그아웃 메뉴 보이기
+                dropdownUI.show();
 
                 if (isAdmin) {
                     adminUI.show(); // 관리자 메뉴 보이기
@@ -123,6 +132,7 @@ let userObject =
                 logoutUI.hide(); // 로그아웃 메뉴 숨기기
                 loginUI.show(); // 로그인 메뉴 보이기
                 adminUI.hide(); // 관리자 메뉴 숨기기
+                dropdownUI.show();
             }
         },
 

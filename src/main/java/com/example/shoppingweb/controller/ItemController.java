@@ -23,8 +23,7 @@ public class ItemController {
 
     @GetMapping("/item/category/{category}")
     public String getItemListByCategory(@PathVariable String category, Model model,
-                                        @PageableDefault(size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable)
-    {
+                                        @PageableDefault(size = 8, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         /*if (searchKeyword != null) {
             Page<Item> itemList = itemService.getItemList(pageable);
         } else {
@@ -38,8 +37,7 @@ public class ItemController {
 
     @GetMapping({"", "/"})
     public String getItemList(Model model, @PageableDefault(size = 8, sort = "id",
-            direction = Sort.Direction.ASC)Pageable pageable)
-    {
+            direction = Sort.Direction.ASC) Pageable pageable) {
         model.addAttribute("itemList", itemService.getItemList(pageable));
         return "th/index";
     }

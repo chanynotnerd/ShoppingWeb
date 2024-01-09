@@ -44,12 +44,17 @@ public class UserService {
         }
 
         String token = jwtTokenProvider.createToken(user);
+        String refreshToken = jwtTokenProvider.createRefreshToken(user);
+
+        System.out.println("Generated Token: " + token);
+        System.out.println("Generated Refresh Token: " + refreshToken);
 
         return UserResponseDTO.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .authority(user.getAuthority())
                 .token(token)
+                .refreshToken(refreshToken)
                 .build();
     }
 

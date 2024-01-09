@@ -23,6 +23,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
     private final long exp = 1000L * 5;   // 만료시간: 5초
+    private final long refreshTokenExp = 1000L * 60 * 60 * 24 * 7; // 만료시간: 1주일
     private SecretKey secretKey;
     @Value("${jwt.secret.key}")
     private String chanySecretKey;
@@ -34,7 +35,7 @@ public class JwtTokenProvider {
         secretKey = Keys.hmacShaKeyFor(chanySecretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    // 토큰 생성
+    // 엑세스토큰 생성
     public String createToken(User user) {
         Claims claims = Jwts.claims().setSubject(user.getUsername()); // 사용자 이름 설정
         claims.put("email", user.getEmail()); // 이메일을 클레임에 추가
@@ -47,6 +48,18 @@ public class JwtTokenProvider {
                 .setIssuedAt(now) // 현재 시간을 발행 시간으로 설정
                 .setExpiration(new Date(now.getTime() + exp)) // 만료 시간 설정
                 .signWith(secretKey, SignatureAlgorithm.HS256) // 서명 알고리즘과 키 사용
+                .compact();
+    }
+
+    // 리프레시 토큰 생성
+    public String createRefreshToken(User user) {
+        Claims claims = Jwts.claims().setSubject(user.getUsername());
+        Date now = new Date();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + refreshTokenExp)) // 리프레시 토큰 만료 시간 설정
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -72,17 +85,26 @@ public class JwtTokenProvider {
     // 토큰 검증
     public boolean validateToken(String token) {
         try {
-            // Bearer 검증
+            /*// Bearer 검증
             if (!token.substring(0, "BEARER ".length()).equalsIgnoreCase("BEARER ")) {
                 return false;
             } else {
                 token = token.split(" ")[1].trim();
+            }*/
+            if (token == null || !token.startsWith("Bearer ")) {
+                return false;
             }
+            token = token.substring(7); // "Bearer " 삭제
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
             // 만료되었을 시 false
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
+        return claims.getSubject();
     }
 }

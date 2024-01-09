@@ -5,8 +5,10 @@ import com.example.shoppingweb.dto.OAuthType;
 import com.example.shoppingweb.dto.ResponseDTO;
 import com.example.shoppingweb.dto.UserDTO;
 import com.example.shoppingweb.dto.UserResponseDTO;
+import com.example.shoppingweb.persistance.UserRepository;
 import com.example.shoppingweb.security.UserDetailsImpl;
 import com.example.shoppingweb.service.UserService;
+import com.example.shoppingweb.token.JwtTokenProvider;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +32,12 @@ import java.util.Map;
 @Controller
 public class UserController {
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -51,6 +59,7 @@ public class UserController {
         return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 회원 수정 완료");
     }
 
+
     @PostMapping("/auth/login")
     public ResponseEntity<UserResponseDTO> login(@RequestBody UserDTO userDTO, HttpServletResponse response,
                                                  Model model) {
@@ -62,6 +71,7 @@ public class UserController {
             cookie.setHttpOnly(true); // JavaScript를 통한 접근 방지
             cookie.setPath("/"); // 쿠키의 유효 경로 설정
             response.addCookie(cookie);
+
             System.out.println("Login successful: " + userResponseDTO.getToken()); // 추가된 로그
 
             return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
