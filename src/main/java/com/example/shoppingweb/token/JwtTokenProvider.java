@@ -7,6 +7,8 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +24,8 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
-    private final long exp = 1000L * 5;   // 만료시간: 5초
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+    private final long exp = 1000L * 30;   // 만료시간: 30초
     private final long refreshTokenExp = 1000L * 60 * 60 * 24 * 7; // 만료시간: 1주일
     private SecretKey secretKey;
     @Value("${jwt.secret.key}")
@@ -66,10 +69,15 @@ public class JwtTokenProvider {
     // 권한정보 획득
     // Spring Security 인증과정에서 권한확인을 위한 기능
     public Authentication getAuthentication(String token) {
-        // 토큰에서 사용자 이름을 추출
+        /*// 토큰에서 사용자 이름을 추출
         String username = this.getAccount(token);
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getAccount(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());*/
+        String username = this.getAccount(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        logger.info("User details loaded for user: " + username);
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+
     }
 
     // 토큰에 담겨있는 유저 account 획득
@@ -79,32 +87,25 @@ public class JwtTokenProvider {
 
     // Authorization Header를 통해 인증을 한다.
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
     // 토큰 검증
     public boolean validateToken(String token) {
         try {
-            /*// Bearer 검증
-            if (!token.substring(0, "BEARER ".length()).equalsIgnoreCase("BEARER ")) {
-                return false;
-            } else {
-                token = token.split(" ")[1].trim();
-            }*/
-            if (token == null || !token.startsWith("Bearer ")) {
+            if (!token.toLowerCase().startsWith("bearer ")) {
                 return false;
             }
-            token = token.substring(7); // "Bearer " 삭제
+            token = token.substring(7);
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
             // 만료되었을 시 false
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
         }
-    }
-
-    public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
-        return claims.getSubject();
     }
 }

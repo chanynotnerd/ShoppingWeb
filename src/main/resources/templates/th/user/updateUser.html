@@ -8,43 +8,45 @@
 <div th:replace="fragment/header :: header"></div>
 <div class="container mt-3">
     <form>
-        <input id="id" th:value="${#authentication.principal.id}" type="hidden">
+        <input id="userId" type="hidden">
         <!--<p th:text="'OAuth value: ' + ${#authentication.principal.user.oauth}"></p>-->
+        <label for="usernameInput">username:</label>
         <div class="mb-3">
-            <label for="username">Username:</label>
-            <input class="form-control" id="username" name="username" placeholder="Enter username"
-                   th:value="${#authentication.principal.username}">
+            <input class="form-control" id="usernameInput" name="username" placeholder="Enter username">
         </div>
-        <div th:if="${#strings.equals(#authentication.principal.user.oauth, 'DEFAULT')}">
+        <!--<div th:if="${#strings.equals(#authentication.principal.user.oauth, 'DEFAULT')}">-->
         <div class="mb-3">
             <label for="password">Password:</label>
             <input class="form-control" id="password" name="password" placeholder="Enter password" type="password">
         </div>
+        <div class="mb-3 mt-3">
+            <label for="emailInput">email:</label>
+            <input class="form-control" id="emailInput" name="email" placeholder="Enter email" type="email">
         </div>
         <div class="mb-3 mt-3">
-            <label for="email">Email:</label>
-            <input class="form-control" id="email" name="email" placeholder="Enter email" th:value="${#authentication.principal.email}"
-                   type="email">
-        </div>
-        <div class="mb-3 mt-3">
-            <label for="postcode">우편번호:</label>
-            <input class="form-control" id="sample6_postcode" name="postcode" placeholder="우편번호" th:value="${#authentication.principal.postcode}"
+            <label for="postcodeInput">postcode:</label>
+            <input class="form-control" id="postcodeInput" name="postcode" placeholder="우편번호"
                    type="text">
             <input onclick="userObject.execDaumPostcode()" type="button" value="우편번호 찾기"><br>
-            <label for="address">주소:</label>
-            <input class="form-control" id="sample6_address" name="address" placeholder="주소" th:value="${#authentication.principal.address}"
+            <label for="addressInput">address:</label>
+            <input class="form-control" id="addressInput" name="address" placeholder="주소"
                    type="text"><br>
-            <label for="detailAddress">상세주소:</label>
-            <input class="form-control" id="sample6_detailAddress" name="detailAddress" placeholder="상세주소" th:value="${#authentication.principal.detailAddress}"
+            <label for="detailAddressInput">detailAddress:</label>
+            <input class="form-control" id="detailAddressInput" name="detailAddress" placeholder="상세주소"
                    type="text">
         </div>
     </form>
 
-    <button class="btn btn-secondary" id="btn-update">회원 정보 수정</button>
+    <button class="btn btn-secondary" id="btn-update" onclick="userObject.updateUser()">회원 정보 수정</button>
 </div>
 <!-- Include the footer fragment -->
 <div th:replace="fragment/footer :: footer"></div>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <!--<script src="/js/user.js"></script>-->
+<script>
+    $(document).ready(function () {
+        userObject.fetchUserInfo();
+    })
+</script>
 </body>
 </html>

@@ -1,7 +1,6 @@
 package com.example.shoppingweb.controller;
 
 import com.example.shoppingweb.domain.User;
-import com.example.shoppingweb.dto.OAuthType;
 import com.example.shoppingweb.dto.ResponseDTO;
 import com.example.shoppingweb.dto.UserDTO;
 import com.example.shoppingweb.dto.UserResponseDTO;
@@ -10,6 +9,8 @@ import com.example.shoppingweb.security.UserDetailsImpl;
 import com.example.shoppingweb.service.UserService;
 import com.example.shoppingweb.token.JwtTokenProvider;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,8 @@ import java.util.Map;
 
 @Controller
 public class UserController {
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+
     @Autowired
     private UserRepository userRepository;
 
@@ -46,7 +49,45 @@ public class UserController {
     @Value("${kakao.default.password}")
     private String kakaoPassword;
 
+    @GetMapping("/user/info")
+    public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        /*if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증이 필요합니다.");
+        }
+
+        User user = userService.getUser(userDetails.getUsername());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+        }
+
+        UserResponseDTO userResponseDTO = modelMapper.map(user, UserResponseDTO.class);
+        return ResponseEntity.ok(userResponseDTO);*/
+        if (userDetails == null) {
+            logger.info("User details null");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증이 필요합니다.");
+        }
+
+        logger.info("Userinfo requested : " + userDetails.getUsername());
+        User user = userService.getUser(userDetails.getUsername());
+        return ResponseEntity.ok(user);
+    }
+
     @PutMapping("/user")
+    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null || !userDetails.getUsername().equals(userDTO.getUsername())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        // UserDTO를 User 엔티티로 변환
+        User userToUpdate = modelMapper.map(userDTO, User.class);
+
+        // User 엔티티를 사용하여 사용자 정보 수정
+        User updatedUser = userService.updateUser(userToUpdate);
+
+        // 결과를 ResponseDTO로 래핑하여 반환
+        return ResponseEntity.ok(new ResponseDTO<>(HttpStatus.OK.value(), "회원 정보 수정 완료"));
+    }
+    /*@PutMapping("/user")
     public @ResponseBody ResponseDTO<?> updateUser(@RequestBody User user,
                                                    @AuthenticationPrincipal UserDetailsImpl principal) {
         System.out.println("Session info: " + principal);
@@ -58,7 +99,7 @@ public class UserController {
         principal.setUser(userService.updateUser(user));
         return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 회원 수정 완료");
     }
-
+*/
 
     @PostMapping("/auth/login")
     public ResponseEntity<UserResponseDTO> login(@RequestBody UserDTO userDTO, HttpServletResponse response,

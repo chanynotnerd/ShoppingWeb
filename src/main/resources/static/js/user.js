@@ -4,10 +4,6 @@ let userObject =
         init: function () {
             let _this = this;
 
-            // alert("user.js 호출");
-            //
-
-
             $(document).ready(function () {
 
                 $("#btn-save").on("click", () => {
@@ -33,9 +29,42 @@ let userObject =
                 });
                 $("#btn-logout").on("click", function (e) {
                     _this.logout();
-                })
+                });
+                _this.fetchUserInfo();
+            });
+        },
 
-            })
+        fetchUserInfo: function () {
+            let token = localStorage.getItem('accessToken');
+            console.log('Token from storage:', token);
+            if (!token) {
+                console.error('No access token available.');
+                // 토큰이 없으면 로그인 페이지로 리다이렉트
+                /*window.location.href = '/auth/login';*/
+                return;
+            }
+            $.ajax({
+                url: '/user/info', // 사용자 정보를 가져오는 서버의 엔드포인트
+                type: 'GET',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                },
+                success: function (response) {
+                    console.log(response);
+                    $('#userId').val(response.id);
+                    $('#usernameInput').val(response.username);
+                    $('#emailInput').val(response.email);
+                    $('#postcodeInput').val(response.postcode);
+                    $('#addressInput').val(response.address);
+                    $('#detailAddressInput').val(response.detailAddress);
+                },
+                error: function (error) {
+                    console.error("Error fetching user info: ", error);
+                    if (error.status === 401) { // 인증 실패시
+                        window.location.href = '/auth/login';
+                    }
+                }
+            });
         },
 
         execDaumPostcode: function () {
@@ -181,21 +210,25 @@ let userObject =
 
         updateUser: function () {
             let user = {	// user 객체 선언
-                id: $("#id").val(),
-                username: $("#username").val(),
+                id: $("#userId").val(),
+                username: $("#usernameInput").val(),
                 password: $("#password").val(),
-                email: $("#email").val(),
-                postcode: $("#sample6_postcode").val(),
-                address: $("#sample6_address").val(),
-                detailAddress: $("#sample6_detailAddress").val()
-            }
-            if (user.password.trim() === "") {
+                email: $("#emailInput").val(),
+                postcode: $("#postcodeInput").val(),
+                address: $("#addressInput").val(),
+                detailAddress: $("#detailAddressInput").val()
+            };
+            /*if (user.password.trim() === "") {
                 alert("비밀번호를 입력해주세요.");
                 return;
-            }
+            }*/
+            let token = localStorage.getItem('accessToken'); // 로컬 스토리지에서 토큰을 가져옵니다.
             $.ajax({
                 type: "PUT",
                 url: "/user",
+                headers: {
+                    'Authorization': 'Bearer ' + token // 토큰을 요청 헤더에 추가합니다.
+                },
                 data: JSON.stringify(user),
                 contentType: "application/json; charset=utf-8"
             }).done(function (response) {
