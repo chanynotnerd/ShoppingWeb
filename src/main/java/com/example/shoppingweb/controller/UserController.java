@@ -73,17 +73,17 @@ public class UserController {
     }
 
     @PutMapping("/user")
-    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null || !userDetails.getUsername().equals(userDTO.getUsername())) {
+    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO, @AuthenticationPrincipal UserDetailsImpl principal) {
+        if (principal == null || !principal.getUsername().equals(userDTO.getUsername())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         // UserDTO를 User 엔티티로 변환
-        User userToUpdate = modelMapper.map(userDTO, User.class);
+        User user = modelMapper.map(userDTO, User.class);
 
-        // User 엔티티를 사용하여 사용자 정보 수정
-        User updatedUser = userService.updateUser(userToUpdate);
+        User findUser = userService.getUser(user.getUsername());
 
+        principal.setUser(userService.updateUser(findUser));
         // 결과를 ResponseDTO로 래핑하여 반환
         return ResponseEntity.ok(new ResponseDTO<>(HttpStatus.OK.value(), "회원 정보 수정 완료"));
     }

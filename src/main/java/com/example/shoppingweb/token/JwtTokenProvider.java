@@ -25,7 +25,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
-    private final long exp = 1000L * 30;   // 만료시간: 30초
+    private final long exp = 1000L * 60 * 30;   // 만료시간: 30분
     private final long refreshTokenExp = 1000L * 60 * 60 * 24 * 7; // 만료시간: 1주일
     private SecretKey secretKey;
     @Value("${jwt.secret.key}")

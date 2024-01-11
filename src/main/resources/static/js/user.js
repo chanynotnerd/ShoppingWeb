@@ -50,13 +50,21 @@ let userObject =
                     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
                 },
                 success: function (response) {
-                    console.log(response);
-                    $('#userId').val(response.id);
-                    $('#usernameInput').val(response.username);
-                    $('#emailInput').val(response.email);
-                    $('#postcodeInput').val(response.postcode);
-                    $('#addressInput').val(response.address);
-                    $('#detailAddressInput').val(response.detailAddress);
+                    /*console.log(response);*/
+                    var username = localStorage.getItem('username');
+                    var email = localStorage.getItem('email');
+                    var postcode = localStorage.getItem('postcode');
+                    var address = localStorage.getItem('address');
+                    var detailAddress = localStorage.getItem('detailAddress');
+
+                    /*$('#userId').val(response.id);*/
+                    /*$('#usernameInput').val(response.username);
+                    $('#emailInput').val(response.email);*/
+                    $('#usernameInput').val(username);
+                    $('#emailInput').val(email);
+                    $('#postcodeInput').val(postcode);
+                    $('#addressInput').val(address);
+                    $('#detailAddressInput').val(detailAddress);
                 },
                 error: function (error) {
                     console.error("Error fetching user info: ", error);
@@ -97,6 +105,9 @@ let userObject =
                     /*localStorage.setItem('jwtToken', response.token);*/
                     localStorage.setItem('username', response.username);
                     localStorage.setItem('email', response.email);
+                    localStorage.setItem('postcode', response.postcode);
+                    localStorage.setItem('address', response.address);
+                    localStorage.setItem('detailAddress', response.detailAddress);
                     localStorage.setItem('accessToken', response.token);
                     localStorage.setItem('refreshToken', response.refreshToken);
                     /*localStorage.setItem('authority', response.authority);*/
@@ -117,6 +128,9 @@ let userObject =
             localStorage.removeItem('email');
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
+            localStorage.removeItem('postcode');
+            localStorage.removeItem('address');
+            localStorage.removeItem('detailAddress');
             /*localStorage.removeItem('authority');*/
             this.checkAuthStatusAndUpdateMenu();
             window.location.href = '/auth/logout';
@@ -218,10 +232,10 @@ let userObject =
                 address: $("#addressInput").val(),
                 detailAddress: $("#detailAddressInput").val()
             };
-            /*if (user.password.trim() === "") {
+            if (user.password.trim() === "") {
                 alert("비밀번호를 입력해주세요.");
                 return;
-            }*/
+            }
             let token = localStorage.getItem('accessToken'); // 로컬 스토리지에서 토큰을 가져옵니다.
             $.ajax({
                 type: "PUT",

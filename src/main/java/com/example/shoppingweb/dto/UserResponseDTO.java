@@ -13,6 +13,9 @@ import lombok.NoArgsConstructor;
 public class UserResponseDTO {
     private String username;
     private String email;
+    private String postcode;
+    private String address;
+    private String detailAddress;
     private Authority authority;
     private String token;
     private String refreshToken;
