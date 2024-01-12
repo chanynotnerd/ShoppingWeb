@@ -45,7 +45,7 @@
 <div>
     <input class="form-control text-center me-3" id="amount" name="amount" type="num" value="1"
            style="max-width: 3rem"/>
-    <button id="btn-save" class="btn btn-secondary">장바구니</button>
+    <button class="btn btn-secondary" id="btn-save-item">장바구니</button>
 </div>
 <br><br>
 <script th:inline="javascript">
@@ -53,7 +53,8 @@
     const user = [[${user}]];
 
     if (item && item.id) window.itemId = item.id
-    if (user && item.id) window.userId = user.id
+    /*if (user && item.id) window.userId = user.id*/
+    window.userId = localStorage.getItem('id');
 
 
 </script>

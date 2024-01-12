@@ -4,7 +4,7 @@ let cartObject =
 	{
 		let _this = this;
 
-		$("#btn-save").on("click", () => {
+		$("#btn-save-item").on("click", () => {
 			_this.addToCart();
 		});
         // $(document)로 생성되는 모든 버튼에 대해 이벤트 적용
@@ -31,16 +31,23 @@ let cartObject =
 	},
 
 	addToCart: function() {
-		        // alert("장바구니에 제품이 담겼습니다.");
+		alert("장바구니에 제품이 담겼습니다.");
+		var id = localStorage.getItem('id');
         		let cart = {	// user 객체 선언
                     userId: userId,
                     itemId: itemId,
         			amount: $("#amount").val()
         		}
-
+		console.log(userId);
+		console.log(itemId);
+		/*console.log(amount);*/
+		let token = localStorage.getItem('accessToken'); // 로컬 스토리지에서 토큰 가져옴.
 				$.ajax({
 					type: "POST",
 					url: "/cart/add",
+					headers: {
+						'Authorization': 'Bearer ' + token // 토큰을 요청 헤더에 추가
+					},
 					data: JSON.stringify(cart),
 					contentType: "application/json; charset=utf-8"
 				}).done(function(response) {
@@ -57,14 +64,17 @@ let cartObject =
 					}
 					else {
 					alert("문제가 있습니다.");
+						if (response.data != null) {
 						let warn = "";
 						let errors = response["data"];
 						if (errors.userId != null) warn = warn + errors.userId + "\n";
 						if (errors.itemId != null) warn = warn + errors.itemId + "\n";
 						if (errors.amount != null) warn = warn + errors.amount;
 						alert(warn);
+					} else {
+							console.log("data 값이 없는디용?");
+						}
 					}
-
 				}).fail(function(error) {
 					alert("에러 발생 : " + error);
 					console.log(error);

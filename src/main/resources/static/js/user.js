@@ -246,7 +246,7 @@ let userObject =
                 type: "PUT",
                 url: "/user",
                 headers: {
-                    'Authorization': 'Bearer ' + token // 토큰을 요청 헤더에 추가합니다.
+                    'Authorization': 'Bearer ' + token // 토큰을 요청 헤더에 추가
                 },
                 data: JSON.stringify(user),
                 contentType: "application/json; charset=utf-8"

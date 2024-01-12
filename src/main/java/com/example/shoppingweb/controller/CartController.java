@@ -45,10 +45,20 @@ public class CartController {
             return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errors);
         }
         System.out.println(cartItemDTO); // 클라이언트가 보낸 데이터 출력
-        User user = userService.findUserById(cartItemDTO.getUserId());
+        try {
+            User user = userService.findUserById(cartItemDTO.getUserId());
+            Item item = itemService.getItem(cartItemDTO.getItemId());
+            cartService.insertCart(user, item, cartItemDTO.getAmount());
+        } catch (Exception e) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("serverError", e.getMessage());
+            return new ResponseDTO<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), errors);
+        }
+        return new ResponseDTO<>(HttpStatus.OK.value(), "장바구니에 제품이 담겼습니다.");
+        /*User user = userService.findUserById(cartItemDTO.getUserId());
         Item item = itemService.getItem(cartItemDTO.getItemId());
         cartService.insertCart(user, item, cartItemDTO.getAmount());
-        return new ResponseDTO<>(HttpStatus.OK.value(), "장바구니에 제품이 담겼습니다.");
+        return new ResponseDTO<>(HttpStatus.OK.value(), "장바구니에 제품이 담겼습니다.");*/
     }
 
     @GetMapping("/cart/add")
