@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 
 @Component
@@ -35,7 +35,8 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        secretKey = Keys.hmacShaKeyFor(chanySecretKey.getBytes(StandardCharsets.UTF_8));
+        byte[] decodedKey = Base64.getDecoder().decode(chanySecretKey);
+        secretKey = Keys.hmacShaKeyFor(decodedKey);
     }
 
     // 엑세스토큰 생성
@@ -88,6 +89,7 @@ public class JwtTokenProvider {
     // Authorization Header를 통해 인증을 한다.
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
+        System.out.println("bearerToken: " + bearerToken);
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
@@ -97,10 +99,6 @@ public class JwtTokenProvider {
     // 토큰 검증
     public boolean validateToken(String token) {
         try {
-            if (!token.toLowerCase().startsWith("bearer ")) {
-                return false;
-            }
-            token = token.substring(7);
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
             // 만료되었을 시 false
             return !claims.getBody().getExpiration().before(new Date());

@@ -13,6 +13,8 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
+    private int id;
+
     @NotNull(message = "Username이 전달되지 않았습니다.")
     @NotBlank(message = "Username은 필수 입력 항목입니다.")
     @Size(min = 5, max = 15, message = "Username은 다섯 글자 이상 15자 미만으로 입력하세요.")

@@ -50,6 +50,7 @@ public class UserService {
         System.out.println("Generated Refresh Token: " + refreshToken);
 
         return UserResponseDTO.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .postcode(user.getPostcode())
@@ -71,6 +72,7 @@ public class UserService {
         findUser.setAddress(user.getAddress());
         findUser.setDetailAddress(user.getDetailAddress());
 
+        userRepository.save(findUser);
         return findUser;
     }
 

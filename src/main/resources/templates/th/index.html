@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="fragment/head :: head"></div>
     <meta charset="UTF-8">
@@ -62,5 +62,11 @@
 </section>
 <!-- Include the footer fragment -->
 <div th:replace="fragment/footer :: footer"></div>
+<script>
+    $(document).ready(function () {
+        itemObject.fetchUserInfoFromIndex();
+    })
+</script>
+<script src="/js/item.js"></script>
 </body>
 </html>

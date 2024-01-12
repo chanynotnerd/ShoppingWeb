@@ -50,7 +50,9 @@ public class UserController {
     private String kakaoPassword;
 
     @GetMapping("/user/info")
-    public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String authToken, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String token = authToken.substring("Bearer ".length());
+        logger.info("asdftoken:" + token);
         /*if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증이 필요합니다.");
         }
@@ -73,20 +75,34 @@ public class UserController {
     }
 
     @PutMapping("/user")
-    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO, @AuthenticationPrincipal UserDetailsImpl principal) {
-        if (principal == null || !principal.getUsername().equals(userDTO.getUsername())) {
+    public @ResponseBody ResponseDTO<?> updateUser(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
+        /*System.out.println("principal: " + principal);
+        if (principal == null || !principal.getUsername().equals(user.getUsername())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        // UserDTO를 User 엔티티로 변환
-        User user = modelMapper.map(userDTO, User.class);
 
-        User findUser = userService.getUser(user.getUsername());
+        principal.setUser(userService.updateUser(user));
+        *//*User findUser = userService.getUser(user.getUsername());
 
-        principal.setUser(userService.updateUser(findUser));
+        principal.setUser(userService.updateUser(findUser));*//*
         // 결과를 ResponseDTO로 래핑하여 반환
-        return ResponseEntity.ok(new ResponseDTO<>(HttpStatus.OK.value(), "회원 정보 수정 완료"));
+        return ResponseEntity.ok(new ResponseDTO<>(HttpStatus.OK.value(), "회원 정보 수정 완료"));*/
+        // UserDTO 객체에 대한 유효성 검사, kakao 로그인 때문에 막아놓음
+        // UserDTO를 User 객체로 변환
+        User user = modelMapper.map(userDTO, User.class);
+        User findUser = userService.getUser(user.getUsername());
+        if (findUser.getUsername() != null) {
+            // 유저 추가
+            userService.updateUser(user);
+            return new ResponseDTO<>(HttpStatus.OK.value(),
+                    user.getUsername() + " 님 회원수정 성공");
+        } else {
+            return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(),
+                    user.getUsername() + " 님 회원 수정 실패.");
+        }
     }
+
     /*@PutMapping("/user")
     public @ResponseBody ResponseDTO<?> updateUser(@RequestBody User user,
                                                    @AuthenticationPrincipal UserDetailsImpl principal) {
@@ -100,6 +116,34 @@ public class UserController {
         return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 회원 수정 완료");
     }
 */
+
+    /*
+    * @PostMapping("/auth/insertUser")
+    public @ResponseBody ResponseDTO<?> insertUser(
+            @Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
+
+        // UserDTO 객체에 대한 유효성 검사, kakao 로그인 때문에 막아놓음
+        if (bindingResult.hasErrors()) {
+            // 에러가 하나라도 있다면 에러 메세지를 Map에 등록
+            Map<String, String> errorMap = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            }
+            return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errorMap);
+        }
+        // UserDTO를 User 객체로 변환
+        User user = modelMapper.map(userDTO, User.class);
+        User findUser = userService.getUser(user.getUsername());
+        if (findUser.getUsername() == null) {
+            // 유저 추가
+            userService.insertUser(user);
+            return new ResponseDTO<>(HttpStatus.OK.value(),
+                    user.getUsername() + " 님 회원가입 성공");
+        } else {
+            return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(),
+                    user.getUsername() + " 님은 이미 회원이십니다.");
+        }
+    }*/
 
     @PostMapping("/auth/login")
     public ResponseEntity<UserResponseDTO> login(@RequestBody UserDTO userDTO, HttpServletResponse response,

@@ -47,10 +47,12 @@ let userObject =
                 url: '/user/info', // 사용자 정보를 가져오는 서버의 엔드포인트
                 type: 'GET',
                 beforeSend: function (xhr) {
+                    let token = localStorage.getItem('accessToken');
                     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
                 },
                 success: function (response) {
                     /*console.log(response);*/
+                    var id = localStorage.getItem('id');
                     var username = localStorage.getItem('username');
                     var email = localStorage.getItem('email');
                     var postcode = localStorage.getItem('postcode');
@@ -60,6 +62,7 @@ let userObject =
                     /*$('#userId').val(response.id);*/
                     /*$('#usernameInput').val(response.username);
                     $('#emailInput').val(response.email);*/
+                    $('#userId').val(id);
                     $('#usernameInput').val(username);
                     $('#emailInput').val(email);
                     $('#postcodeInput').val(postcode);
@@ -110,6 +113,7 @@ let userObject =
                     localStorage.setItem('detailAddress', response.detailAddress);
                     localStorage.setItem('accessToken', response.token);
                     localStorage.setItem('refreshToken', response.refreshToken);
+                    localStorage.setItem('id', response.id);
                     /*localStorage.setItem('authority', response.authority);*/
 
                     _this.checkAuthStatusAndUpdateMenu(); // 메뉴 상태 업데이트
@@ -223,6 +227,7 @@ let userObject =
         },
 
         updateUser: function () {
+            alert("회원수정 요청됨");
             let user = {	// user 객체 선언
                 id: $("#userId").val(),
                 username: $("#usernameInput").val(),
@@ -236,7 +241,7 @@ let userObject =
                 alert("비밀번호를 입력해주세요.");
                 return;
             }
-            let token = localStorage.getItem('accessToken'); // 로컬 스토리지에서 토큰을 가져옵니다.
+            let token = localStorage.getItem('accessToken'); // 로컬 스토리지에서 토큰 가져옴.
             $.ajax({
                 type: "PUT",
                 url: "/user",

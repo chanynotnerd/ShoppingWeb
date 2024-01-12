@@ -17,6 +17,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -51,11 +56,25 @@ public class ShoppingWebSecurityConfiguration extends WebSecurityConfigurerAdapt
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*")); // 모든 origin 허용 (적절한 도메인으로 제한하는 것이 좋습니다)
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*")); // 모든 헤더 허용
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors().and();
+
         // 인증 없이 접근을 허용하는 경로
         http.authorizeRequests().antMatchers("/webjars/**", "/js/**", "/image/**", "/css/**",
                 "/", "/auth/**", "/item/**", "/oauth/**", "/shoppingItem/**", "/order/**", "/PayCheckSum.jsp").permitAll();
+
 
         // 이외의 경로는 인증 필요
         http.authorizeRequests().anyRequest().authenticated();
