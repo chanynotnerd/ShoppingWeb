@@ -39,6 +39,7 @@ public class ItemController {
     public String getItemList(Model model, @PageableDefault(size = 8, sort = "id",
             direction = Sort.Direction.ASC) Pageable pageable) {
         model.addAttribute("itemList", itemService.getItemList(pageable));
+        System.out.println("브랜치 테슽트입니다.");
         return "th/index";
     }
 
