@@ -12,6 +12,7 @@ import com.example.shoppingweb.service.ItemService;
 import com.example.shoppingweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,12 +36,84 @@ public class CartController {
         return user != null ? user.getId() : null;
     }
 
+    @GetMapping("/cart/user")
+    public @ResponseBody ResponseEntity<?> viewCart(@AuthenticationPrincipal UserDetailsImpl principal, Model model) {
+
+        /*String token = authToken.substring("Bearer ".length());
+        logger.info("asdftoken from cart:" + token);*/
+
+        // 인증된 사용자의 정보를 가져옵니다.
+        User user = userService.findUserById(principal.getId());
+        Cart cart = cartService.getCartByUser(user);
+
+        // 장바구니가 없으면 새로 생성합니다.
+        if (cart == null) {
+            cart = cartService.insertCart(user, null, 0);
+        }
+
+        // 장바구니 내역과 총 금액을 계산합니다.
+        int total = calculateTotal(cart);
+
+        // 응답 데이터를 생성합니다.
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("cart", cart);
+        responseData.put("total", total);
+
+        // ResponseEntity를 사용하여 JSON 형태로 데이터를 반환합니다.
+        return ResponseEntity.ok(responseData);
+    }
+
+    // 총 금액을 계산하는 별도의 메서드입니다.
+    private int calculateTotal(Cart cart) {
+        int total = 0;
+        for (Cart_item cartItem : cart.getCartItems()) {
+            Item item = cartItem.getItem();
+            int price = item.getPrice();
+            Integer discountPercent = item.getDiscountPercent();
+
+            // 할인율이 적용된 가격을 계산합니다.
+            if (discountPercent != null) {
+                int discountPrice = price - (price * discountPercent / 100);
+                total += discountPrice * cartItem.getCount();
+            } else {
+                // 할인이 없는 경우, 기본 가격을 사용합니다.
+                total += price * cartItem.getCount();
+            }
+        }
+        return total;
+        /*User user = userService.findUserById(principal.getId());  // userDetails에 있는 사용자 아이디를 DB에서 가져옴
+        Cart cart = cartService.getCartByUser(user);    // 사용자의 장바구니를 가져옴.
+        if (cart == null) {
+            // 사용자에게 할당된 Cart가 없는 경우, 새 Cart를 생성
+            cart = cartService.insertCart(user, null, 0);
+        }
+        model.addAttribute("cart", cart);   // 가져온 장바구니 프론트에 출력
+        model.addAttribute("userId", user.getId()); // 사용자 아이디를 프론트에 넘겨줌, 데이터 주고받기 위함
+
+        // 장바구니 내 수량과 상품의 가격을 적용한 총 금액 출력
+        int total = 0;
+        for (Cart_item cartItem : cart.getCartItems()) {
+            // total += cartItem.getItem().getPrice() * cartItem.getCount();
+            Item item = cartItem.getItem();
+            int price = item.getPrice();
+            if (item.getDiscountPercent() != null) {
+                // 할인율이 적용된 가격 계산
+                int discountPrice = (int) (price - (price * (item.getDiscountPercent() / 100.0)));
+                total += discountPrice * cartItem.getCount();
+            } else {
+                // 할인이 없는 경우 기본 가격 사용
+                total += price * cartItem.getCount();
+            }
+        }
+        model.addAttribute("total", total); // 총 금액 프론트에 출력
+        return "th/cart/getCart";*/
+    }
     @PostMapping("/cart/add")
     public @ResponseBody ResponseDTO<?> AddCart(@RequestBody CartItemDTO cartItemDTO)
     {
         if (cartItemDTO.getUserId() == null || cartItemDTO.getItemId() == null) {
             Map<String, String> errors = new HashMap<>();
-            if (cartItemDTO.getUserId() == null) errors.put("userId", "User ID is missing");
+            if (cartItemDTO.getUserId() == null) errors.put("userId 문제", "User ID is missing");
             if (cartItemDTO.getItemId() == null) errors.put("itemId", "Item ID is missing");
             return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errors);
         }
@@ -68,7 +141,7 @@ public class CartController {
     }
 
 
-    @GetMapping("/cart/user")
+    /*@GetMapping("/cart/user")
     public String viewCart(@AuthenticationPrincipal UserDetailsImpl principal, Model model) {
 
         User user = userService.findUserById(principal.getId());  // userDetails에 있는 사용자 아이디를 DB에서 가져옴
@@ -97,7 +170,7 @@ public class CartController {
         }
         model.addAttribute("total", total); // 총 금액 프론트에 출력
         return "th/cart/getCart";
-    }
+    }*/
 
     @DeleteMapping("/cart/item")
     public @ResponseBody ResponseDTO<?> deleteOne(@RequestBody CartItemDTO cartItemDTO){
