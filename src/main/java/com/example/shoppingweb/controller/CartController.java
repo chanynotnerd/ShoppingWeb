@@ -44,7 +44,7 @@ public class CartController {
             if (cartItemDTO.getItemId() == null) errors.put("itemId", "Item ID is missing");
             return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errors);
         }
-        System.out.println(cartItemDTO); // 클라이언트가 보낸 데이터 출력
+        System.out.println(cartItemDTO); // 클라이언트가 보낸 데이터 출력 !!!
         try {
             User user = userService.findUserById(cartItemDTO.getUserId());
             Item item = itemService.getItem(cartItemDTO.getItemId());
